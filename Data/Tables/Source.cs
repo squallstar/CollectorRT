@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CollectorRT.Data.Tables
 {
-    class Source
+    public class Source
     {
-        [SQLite.PrimaryKey]
+        [SQLite.PrimaryKey, SQLite.AutoIncrement]
         public int ID { get; set; }
         public string Guid { get; set; }
         public string Title { get; set; }
@@ -16,5 +16,6 @@ namespace CollectorRT.Data.Tables
         public string Url { get; set; }
         public string Description { get; set; }
         public int UnreadEntries { get; set; }
+        public DateTime DateUpdate { get; set; }
     }
 }

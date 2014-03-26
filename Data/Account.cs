@@ -1,9 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using CollectorRT.Data.Tables;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 
 namespace CollectorRT.Data
 {
@@ -113,6 +115,69 @@ namespace CollectorRT.Data
                     }
 
                     int datesync = int.Parse(result["datesync"].ToString());
+
+                    var db = (Application.Current as App).db;
+
+                    var serverSources = JsonConvert.DeserializeObject<List<Source>>(result["collections"].ToString());
+                    var localSources = DB.Current.sources.ToList();
+
+                    var sourcesToRemove = new List<Source>(localSources);
+                    int countNew = 0, countUpdate = 0;
+
+                    foreach (var x in serverSources)
+                    {
+                        Source serverSource = x;
+                        Source existingSource = null;
+
+                        foreach (var s in localSources)
+                        {
+                            if (serverSource.Guid == s.Guid)
+                            {
+                                existingSource = s;
+                                break;
+                            }
+                        }
+
+                        if (existingSource != null)
+                        {
+                            sourcesToRemove.Remove(existingSource);
+                            countUpdate++;
+
+                            //Update the existing source
+                            existingSource.Description = serverSource.Description;
+                            existingSource.Kind = serverSource.Kind;
+                            existingSource.Title = serverSource.Title;
+                            existingSource.UnreadEntries = serverSource.UnreadEntries;
+                            existingSource.Url = serverSource.Url;
+
+                            db.connection.Update(existingSource);
+                            System.Diagnostics.Debug.WriteLine("Source updated");
+                        }
+                        else
+                        {
+                            //New source
+                            countNew++;
+
+                            db.connection.Insert(new Source
+                            {
+                                Guid = serverSource.Guid,
+                                Title = serverSource.Title,
+                                Kind = serverSource.Kind,
+                                Description = serverSource.Description,
+                                Url = serverSource.Url,
+                                DateUpdate = DateTime.Today,
+                                UnreadEntries = 0
+                            });
+
+                            System.Diagnostics.Debug.WriteLine("Source added");
+                        }
+                    }
+
+                    foreach (var s in sourcesToRemove)
+                    {
+                        db.connection.Delete(s);
+                        System.Diagnostics.Debug.WriteLine("Source removed");
+                    }
 
                     if (result["preferences"] != null)
                     {
