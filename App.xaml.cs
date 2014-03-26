@@ -26,6 +26,7 @@ namespace CollectorRT
     sealed partial class App : Application
     {
         public Account account;
+        public DB db;
 
         /// <summary>
         /// Inizializza l'oggetto Application singleton.  Si tratta della prima riga del codice creato
@@ -59,6 +60,7 @@ namespace CollectorRT
             if (rootFrame == null)
             {
                 this.account = new Account();
+                this.db = new DB();
 
                 // Creare un frame che agisca da contesto di navigazione e passare alla prima pagina
                 rootFrame = new Frame();
@@ -86,6 +88,12 @@ namespace CollectorRT
             // Assicurarsi che la finestra corrente sia attiva
             Window.Current.Activate();
         }
+
+        //private async void CreateDatabase()
+        //{
+        //    SQLiteAsyncConnection conn = new SQLiteAsyncConnection("people");
+        //    await conn.CreateTableAsync<Person>();
+        //}
 
         /// <summary>
         /// Chiamato quando la navigazione a una determinata pagina ha esito negativo
