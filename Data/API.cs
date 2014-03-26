@@ -25,5 +25,19 @@ namespace CollectorRT.Data
                 return result.IsSuccessStatusCode;
             }
         }
+
+        public static async Task<HttpResponseMessage> PullData()
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(API.baseURL);
+                var content = new FormUrlEncodedContent(new[] 
+            {
+                new KeyValuePair<string, string>("email", Account.Current.Email),
+                new KeyValuePair<string, string>("password", Account.Current.Password)
+            });
+                return await client.PostAsync("pull/", content);
+            }
+        }
     }
 }

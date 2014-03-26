@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CollectorRT.Data;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,6 +27,8 @@ namespace CollectorRT
         public MainPage()
         {
             this.InitializeComponent();
+
+            txtMessage.Visibility = Visibility.Collapsed;
         }
 
         private async void btnLogin_Click(object sender, RoutedEventArgs e)
@@ -60,6 +63,9 @@ namespace CollectorRT
                 txtEmail.Visibility = Visibility.Collapsed;
                 txtPassword.Visibility = Visibility.Collapsed;
                 loader.IsActive = true;
+                txtMessage.Visibility = Visibility.Visible;
+
+                var syncSuccess = await Account.Current.Sync();
             }
         }
     }

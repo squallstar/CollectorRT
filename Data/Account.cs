@@ -66,5 +66,17 @@ namespace CollectorRT.Data
 
             return success;
         }
+
+        public async Task<bool> Sync()
+        {
+            var data = await API.PullData();
+
+            if (data.IsSuccessStatusCode)
+            {
+                var response = await data.Content.ReadAsStringAsync();
+            }
+
+            return data.IsSuccessStatusCode;
+        }
     }
 }
