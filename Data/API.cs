@@ -34,7 +34,8 @@ namespace CollectorRT.Data
                 var content = new FormUrlEncodedContent(new[] 
             {
                 new KeyValuePair<string, string>("email", Account.Current.Email),
-                new KeyValuePair<string, string>("password", Account.Current.Password)
+                new KeyValuePair<string, string>("password", Account.Current.Password),
+                new KeyValuePair<string, string>("datesync", Account.Current.LastSyncTimestamp.ToString())
             });
                 return await client.PostAsync("pull/", content);
             }

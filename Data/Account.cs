@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +14,7 @@ namespace CollectorRT.Data
         private static string AccountLogged = "Account.Logged";
         private static string AccountEmail = "Account.Email";
         private static string AccountPassword = "Account.Password";
-        //private static string AccountLastSync = "Account.LastSync";
+        private static string AccountLastSync = "Account.LastSync";
 
         public static Account Current
         {
@@ -46,6 +48,25 @@ namespace CollectorRT.Data
             }
         }
 
+        public int LastSyncTimestamp
+        {
+            get
+            {
+                if (settings.Values.ContainsKey(AccountLastSync))
+                {
+                    return int.Parse(settings.Values[AccountLastSync].ToString());
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            set
+            {
+                settings.Values[AccountLastSync] = value;
+            }
+        }
+
         public void Logout()
         {
             settings.Values.Remove(AccountLogged);
@@ -71,12 +92,88 @@ namespace CollectorRT.Data
         {
             var data = await API.PullData();
 
-            if (data.IsSuccessStatusCode)
+            var success = data.IsSuccessStatusCode;
+
+            if (success)
             {
                 var response = await data.Content.ReadAsStringAsync();
+
+                if (response != null && response != "")
+                {
+                    JObject result = null;
+
+                    try
+                    {
+                        result = JObject.Parse(response);
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Debug.WriteLine("JSON Parsing failed: " + e.Message);
+                        return success;
+                    }
+
+                    int datesync = int.Parse(result["datesync"].ToString());
+
+                    if (result["preferences"] != null)
+                    {
+                        var serverSettings = JsonConvert.DeserializeObject<IDictionary<string, object>>(result["preferences"].ToString());
+
+                        //Add new keys
+                        this.ReplaceIntSetting(serverSettings, "Settings.EntriesLimit");
+
+                        this.ReplaceStringSetting(serverSettings, "Twitter.Token.Key");
+                        this.ReplaceStringSetting(serverSettings, "Twitter.Token.Secret");
+                        this.ReplaceStringSetting(serverSettings, "Twitter.userId");
+                        this.ReplaceStringSetting(serverSettings, "Twitter.screenName");
+
+                        this.ReplaceStringSetting(serverSettings, "Settings.FB.AccessToken");
+                        this.ReplaceStringSetting(serverSettings, "Settings.FB.ID");
+                        this.ReplaceStringSetting(serverSettings, "Settings.FB.FullName");
+
+                        this.ReplaceStringSetting(serverSettings, "Settings.Instagram.AccessToken");
+                        this.ReplaceStringSetting(serverSettings, "Settings.Instagram.FullName");
+
+                        //this.ReplaceStringSetting(serverSettings, Pocket.AccessTokenKey);
+                        //this.ReplaceStringSetting(serverSettings, Pocket.UsernameKey);
+
+                        this.LastSyncTimestamp = int.Parse(result["datesync"].ToString());
+                    }
+                }
             }
 
-            return data.IsSuccessStatusCode;
+            return success;
+        }
+
+        private void ReplaceIntSetting(IDictionary<string, object> collection, string key)
+        {
+            try
+            {
+                if (collection.ContainsKey(key))
+                {
+                    settings.Values[key] = Int32.Parse(collection[key].ToString());
+                }
+                else if (settings.Values.ContainsKey(key))
+                {
+                    settings.Values.Remove(key);
+                }
+            }
+            catch (Exception) { }
+        }
+
+        private void ReplaceStringSetting(IDictionary<string, object> collection, string key)
+        {
+            try
+            {
+                if (collection.ContainsKey(key))
+                {
+                    settings.Values[key] = collection[key].ToString();
+                }
+                else if (settings.Values.ContainsKey(key))
+                {
+                    settings.Values.Remove(key);
+                }
+            }
+            catch (Exception) { }
         }
     }
 }
