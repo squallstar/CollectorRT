@@ -59,6 +59,7 @@ namespace CollectorRT
             }
             else
             {
+                txtDescription.Visibility = Visibility.Collapsed;
                 btnLogin.Visibility = Visibility.Collapsed;
                 txtEmail.Visibility = Visibility.Collapsed;
                 txtPassword.Visibility = Visibility.Collapsed;
