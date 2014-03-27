@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Web.Syndication;
@@ -33,7 +34,7 @@ namespace CollectorRT.Data.Downloaders
         {
             SyndicationClient client = new SyndicationClient
             {
-                Timeout = 8000
+                Timeout = 6000
             };
 
             Uri feedUri = new Uri(feedUrl);
@@ -122,7 +123,7 @@ namespace CollectorRT.Data.Downloaders
 
                     if (item.Summary != null)
                     {
-                        entry.Summary = item.Summary.ToString();
+                        entry.Summary = CleanString(item.Summary.ToString());
                     }
 
                     if (item.PublishedDate != null && item.PublishedDate.Ticks > 0)
@@ -134,14 +135,53 @@ namespace CollectorRT.Data.Downloaders
                         entry.DatePublish = entry.DateInsert;
                     }
 
-                    if (feed.SourceFormat == SyndicationFormat.Atom10)
+                    if (item.Content != null)
                     {
-                        entry.ContentText = item.Content.Text;
+                        entry.ContentText = CleanString(item.Content.Text, maxTextLength);
+                        entry.ThumbnailURL = FirstImageFromText(item.Content.Text);
                     }
-                    else if (feed.SourceFormat == SyndicationFormat.Rss20)
+                    else
                     {
-                        entry.ContentText = entry.Summary;
+                        string content = null;
+                        foreach (ISyndicationNode ext in item.ElementExtensions)
+                        {
+                            if (ext.NodeName == "content")
+                            {
+                                content = ext.NodeValue;
+                                break;
+                            }
+                        }
+
+                        if (content != null)
+                        {
+                            entry.ContentText = CleanString(content, maxTextLength);
+                            entry.ThumbnailURL = FirstImageFromText(content);
+                        }
                     }
+
+                    if (entry.ThumbnailURL == null)
+                    {
+                        foreach (var l in item.Links)
+                        {
+                            if (l == null || l.Uri == null || !l.Uri.IsAbsoluteUri) continue;
+
+                            string found = FirstImageFromText(l.Uri.AbsoluteUri);
+                            if (found != null)
+                            {
+                                entry.ThumbnailURL = found;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (item.Authors.Count > 0)
+                    {
+                        SyndicationPerson person = item.Authors.FirstOrDefault();
+                        if (person.Name != null) entry.Author = person.Name;
+                        if (person.Email != null) entry.AuthorUsername = person.Email;
+                    }
+
+                    if (entry.ThumbnailURL != null) entry.ThumbnailHasBeenDownloaded = true;
 
                     DB.Current.connection.Insert(entry);
 
@@ -154,6 +194,54 @@ namespace CollectorRT.Data.Downloaders
             }
 
             System.Diagnostics.Debug.WriteLine(String.Format("{0} articles added for source {1}", i, sourceUrl));
+        }
+ 
+        public static string CleanString(string value, int maxLength = 1000)
+        {
+            if (value == null) return null;
+
+            int strLength = 0;
+            string fixedString = "";
+
+            fixedString = StripHtml(Regex.Replace(value.ToString(), "<br ?/?>|</p>", "\r\n"));
+
+            // Remove encoded HTML characters.
+            //fixedString = HttpUtility.HtmlDecode(fixedString).Trim();
+
+            strLength = fixedString.ToString().Length;
+
+            // Some feed management tools include an image tag in the Description field of an RSS feed, 
+            // so even if the Description field (and thus, the Summary property) is not populated, it could still contain HTML. 
+            // Due to this, after we strip tags from the string, we should return null if there is nothing left in the resulting string. 
+            if (strLength == 0)
+            {
+                return null;
+            }
+
+            // Truncate the text if it is too long. 
+            else if (strLength > maxLength)
+            {
+                try
+                {
+                    fixedString = fixedString.Substring(0, maxLength);
+
+                    // Unless we take the next step, the string trunrancation could occur in the middle of a word.
+                    // Using LastIndexOf we can find the last space character in the string and truncate there. 
+                    int idx = fixedString.LastIndexOf(" ");
+                    if (fixedString.Length > idx)
+                    {
+                        fixedString = fixedString.Substring(0, idx);
+                    }
+                }
+                catch (Exception)
+                {
+                    //Nothing
+                }
+
+                fixedString += "...";
+            }
+
+            return fixedString;
         }
     }
 }

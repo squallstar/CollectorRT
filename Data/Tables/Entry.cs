@@ -16,6 +16,8 @@ namespace CollectorRT.Data.Tables
         public string ThumbnailURL { get; set; }
         public string Link { get; set; }
         public string Kind { get; set; }
+        public string Author { get; set; }
+        public string AuthorUsername { get; set; }
         public int Source { get; set; }
         public bool ThumbnailHasBeenDownloaded { get; set; }
         public DateTime DateInsert { get; set; }
