@@ -67,5 +67,17 @@ namespace CollectorRT.Data.Tables
 
             return success;
         }
+
+        public Entry FirstEntryWithImage()
+        {
+            var entry = DB.Current.entries.Where(e => e.Source == this.ID && e.ThumbnailURL != null).FirstOrDefault();
+
+            if (entry == null)
+            {
+                return DB.Current.entries.Where(e => e.Source == this.ID).FirstOrDefault();
+            }
+
+            return entry;
+        }
     }
 }

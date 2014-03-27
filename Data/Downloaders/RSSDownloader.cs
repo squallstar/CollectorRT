@@ -66,7 +66,7 @@ namespace CollectorRT.Data.Downloaders
                 {
                     string itemId = null;
                     string link = null;
-                    string title = item.Title.ToString();
+                    string title = item.Title.Text.Trim();
 
                     if (item.Links.Count > 0)
                     {
@@ -113,6 +113,7 @@ namespace CollectorRT.Data.Downloaders
                     Entry entry = new Entry
                     {
                         ID = itemId,
+                        Source = source.ID,
                         Kind = "rss",
                         Title = title,
                         Link = link,
@@ -123,7 +124,7 @@ namespace CollectorRT.Data.Downloaders
 
                     if (item.Summary != null)
                     {
-                        entry.Summary = CleanString(item.Summary.ToString());
+                        entry.Summary = CleanString(item.Summary.Text);
                     }
 
                     if (item.PublishedDate != null && item.PublishedDate.Ticks > 0)
