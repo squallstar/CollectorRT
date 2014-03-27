@@ -82,6 +82,7 @@ namespace CollectorRT.Data
                 
             if (success)
             {
+                System.Diagnostics.Debug.WriteLine("User just logged in");
                 settings.Values[AccountLogged] = true;
                 settings.Values[AccountEmail] = email;
                 settings.Values[AccountPassword] = password;
@@ -95,6 +96,8 @@ namespace CollectorRT.Data
             var data = await API.PullData();
 
             var success = data.IsSuccessStatusCode;
+
+            System.Diagnostics.Debug.WriteLine("Syncing data...");
 
             if (success)
             {

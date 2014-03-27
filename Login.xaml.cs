@@ -67,7 +67,35 @@ namespace CollectorRT
                 txtMessage.Visibility = Visibility.Visible;
 
                 var syncSuccess = await Account.Current.Sync();
+                if (syncSuccess)
+                {
+                    GetCollectionArticles();
+                }
+                else
+                {
+                    MessageDialog msgDialog = new MessageDialog("We couldn't sync your account details. Please try to login with your Collector account on your Windows Phone, then try again to log here with the same account.", "Sync failed");
+
+                    UICommand okBtn = new UICommand("OK");
+                    msgDialog.Commands.Add(okBtn);
+
+                    await msgDialog.ShowAsync();
+
+                    txtDescription.Visibility = Visibility.Visible;
+                    txtEmail.IsEnabled = true;
+                    txtPassword.IsEnabled = true;
+                    txtPassword.Text = "";
+                    btnLogin.IsEnabled = true;
+                    loader.IsActive = false;
+                    txtMessage.Visibility = Visibility.Collapsed;
+                }
             }
+        }
+
+        private void GetCollectionArticles()
+        {
+            var collections = DB.Current.sources.ToList();
+
+            txtMessage.Text = String.Format("Getting collections data... {0} collections left", collections.Count);
         }
     }
 }

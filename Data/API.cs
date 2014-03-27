@@ -37,6 +37,7 @@ namespace CollectorRT.Data
                 new KeyValuePair<string, string>("password", Account.Current.Password),
                 new KeyValuePair<string, string>("datesync", Account.Current.LastSyncTimestamp.ToString())
             });
+                System.Diagnostics.Debug.WriteLine("Requesting sync for timestamp " + Account.Current.LastSyncTimestamp.ToString());
                 return await client.PostAsync("pull/", content);
             }
         }
