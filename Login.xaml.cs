@@ -91,11 +91,15 @@ namespace CollectorRT
             }
         }
 
-        private void GetCollectionArticles()
+        private async void GetCollectionArticles()
         {
             var collections = DB.Current.sources.ToList();
+            txtMessage.Text = String.Format("Getting collections data...\r\n{0} collections left", collections.Count);
 
-            txtMessage.Text = String.Format("Getting collections data... {0} collections left", collections.Count);
+            foreach (var collection in collections)
+            {
+                await collection.update();
+            }
         }
     }
 }

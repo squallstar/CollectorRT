@@ -108,6 +108,8 @@
     <Compile Include="Data\Account.cs" />
     <Compile Include="Data\API.cs" />
     <Compile Include="Data\DB.cs" />
+    <Compile Include="Data\Downloaders\Downloader.cs" />
+    <Compile Include="Data\Downloaders\RSSDownloader.cs" />
     <Compile Include="Data\Tables\Source.cs" />
     <Compile Include="Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
