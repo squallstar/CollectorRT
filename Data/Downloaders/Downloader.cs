@@ -9,5 +9,9 @@ namespace CollectorRT.Data
 {
     class Downloader
     {
+        public static string MD5(string str)
+        {
+            return MD5CryptoServiceProvider.GetMd5String(str);
+        }
     }
 }

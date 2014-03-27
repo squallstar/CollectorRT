@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CollectorRT.Data.Downloaders;
+using System.Text.RegularExpressions;
 
 namespace CollectorRT.Data.Tables
 {
@@ -18,6 +19,25 @@ namespace CollectorRT.Data.Tables
         public string Description { get; set; }
         public int UnreadEntries { get; set; }
         public DateTime DateUpdate { get; set; }
+
+        private string _urlSeparator = "\n";
+
+        public string[] Urls
+        {
+            get
+            {
+                if (this.Url != null && this.Url.Contains(_urlSeparator))
+                {
+                    //Multiple sources
+                    return Regex.Split(this.Url, _urlSeparator);
+                }
+                else
+                {
+                    //Single sources
+                    return new string[] { this.Url };
+                }
+            }
+        }
 
         public async Task<bool> update()
         {

@@ -110,6 +110,7 @@
     <Compile Include="Data\DB.cs" />
     <Compile Include="Data\Downloaders\Downloader.cs" />
     <Compile Include="Data\Downloaders\RSSDownloader.cs" />
+    <Compile Include="Data\External\Md5.cs" />
     <Compile Include="Data\Tables\Source.cs" />
     <Compile Include="Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
