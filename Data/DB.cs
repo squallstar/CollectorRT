@@ -22,6 +22,7 @@ namespace CollectorRT.Data
 
             // Create the tables if they don't exist
             connection.CreateTable<Source>();
+            connection.CreateTable<Entry>();
         }
 
         public static DB Current
@@ -37,6 +38,14 @@ namespace CollectorRT.Data
             get
             {
                 return connection.Table<Source>();
+            }
+        }
+
+        public SQLite.TableQuery<Entry> entries
+        {
+            get
+            {
+                return connection.Table<Entry>();
             }
         }
     }

@@ -94,12 +94,17 @@ namespace CollectorRT
         private async void GetCollectionArticles()
         {
             var collections = DB.Current.sources.ToList();
-            txtMessage.Text = String.Format("Getting collections data...\r\n{0} collections left", collections.Count);
+
+            var toUpdate = collections.Count;
 
             foreach (var collection in collections)
             {
+                txtMessage.Text = String.Format("Getting collections data...\r\n{0} collections left", toUpdate);
                 await collection.update();
+                toUpdate--;
             }
+
+            txtMessage.Text = "Finishing up...";
         }
     }
 }
