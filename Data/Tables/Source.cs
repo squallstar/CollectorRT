@@ -39,15 +39,31 @@ namespace CollectorRT.Data.Tables
             }
         }
 
-        public async Task<bool> update()
+        public async Task<bool> update(bool force = false)
         {
+            if (!force && DateUpdate.Ticks >= DateTime.Now.AddMinutes(-5).Ticks)
+            {
+                System.Diagnostics.Debug.WriteLine("No need to update source " + ID);
+                return true;
+            }
+
             System.Diagnostics.Debug.WriteLine("Updating source " + ID);
 
             bool success = false;
 
             if (Kind == "rss") success = await RSSDownloader.UpdateSource(this);
 
-            System.Diagnostics.Debug.WriteLine(success ? "Done!" : "Cannot update the source");
+            if (success)
+            {
+                DateUpdate = DateTime.Now;
+                DB.Current.connection.Update(this);
+
+                System.Diagnostics.Debug.WriteLine("Updating source: done!");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Cannot update the source of kind " + Kind);
+            }
 
             return success;
         }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using CollectorRT.Data;
+using CollectorRT.Data.Tables;
+using CollectorRT.UI;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,9 +25,23 @@ namespace CollectorRT
     /// </summary>
     public sealed partial class CollectionsView : Page
     {
+        private List<Source> sources;
+        private List<SourceTile> tiles;
+
         public CollectionsView()
         {
             this.InitializeComponent();
+
+            tiles = new List<SourceTile>();
+            sources = DB.Current.sources.OrderBy(s => s.DateUpdate).ToList();
+
+            foreach (var source in sources)
+            {
+                var tile = new SourceTile(source);
+                tiles.Add(tile);
+
+                collectionsGrid.Items.Add(tile);
+            }
         }
     }
 }
