@@ -62,11 +62,11 @@ namespace CollectorRT.UI
             {
                 var content = new TextBlock
                 {
-                    Text = entry.Title,
+                    Text = entry.Title.Length > 100 ? entry.Title.Substring(0,99) + "..." : entry.Title,
                     FontSize = 18,
                     TextWrapping = Windows.UI.Xaml.TextWrapping.Wrap,
                     Foreground = new SolidColorBrush(Colors.White),
-                    Margin = new Thickness(20, 10, 20, 0)
+                    Margin = new Thickness(20, 15, 20, -5)
                 };
 
                 bg.Children.Add(content);
@@ -74,11 +74,11 @@ namespace CollectorRT.UI
 
             var title = new TextBlock
             {
-                Text = source.Title,
+                Text = source.Title.ToUpper(),
                 FontSize = 12,
                 FontWeight = FontWeights.Bold,
                 Foreground = new SolidColorBrush(Colors.White),
-                Margin = new Thickness(20,10,20,10)
+                Margin = new Thickness(20,15,20,15)
             };
 
             bg.Children.Add(title);
@@ -92,6 +92,10 @@ namespace CollectorRT.UI
             if (entry != null && entry.ThumbnailURL != null)
             {
                 this.backgroundImage.Source = new BitmapImage(new Uri(entry.ThumbnailURL));
+            }
+            else
+            {
+                Background = new SolidColorBrush(Color.FromArgb(255, 188, 45, 48));
             }
         }
     }

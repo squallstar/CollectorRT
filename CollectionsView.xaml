@@ -8,6 +8,12 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <GridView x:Name="collectionsGrid" Margin="30"></GridView>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Image Margin="17,20,0,-10" Source="Assets/Logo-big.png" HorizontalAlignment="Left" VerticalAlignment="top"/>
+        <GridView Grid.Row="1" x:Name="collectionsGrid" Margin="30"></GridView>
+        
     </Grid>
 </Page>

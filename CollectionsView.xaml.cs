@@ -33,7 +33,7 @@ namespace CollectorRT
             this.InitializeComponent();
 
             tiles = new List<SourceTile>();
-            sources = DB.Current.sources.OrderBy(s => s.DateUpdate).ToList();
+            sources = DB.Current.sources.OrderByDescending(s => s.DateUpdate).ToList();
 
             foreach (var source in sources)
             {
