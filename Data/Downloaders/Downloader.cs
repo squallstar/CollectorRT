@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CollectorRT.Data.Tables;
 using System.Text.RegularExpressions;
+using System.Net.Http;
 
 namespace CollectorRT.Data
 {
@@ -42,6 +43,14 @@ namespace CollectorRT.Data
             }
 
             return null;
+        }
+
+        public static async Task<string> DownloadContentFromUrl(string url)
+        {
+            using (var client = new HttpClient())
+            {
+                return await client.GetStringAsync(url);                
+            }
         }
     }
 }
