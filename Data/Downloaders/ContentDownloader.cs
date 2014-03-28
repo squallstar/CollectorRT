@@ -28,10 +28,17 @@ namespace CollectorRT.Data.Downloaders
             }
         }
 
+        /// <summary>
+        /// Runs the worker on the background thread
+        /// </summary>
         public async void Run()
         {
-            if (IsBusy) return;
+            await Task.Run(() => _Run());
+        }
 
+        private async void _Run()
+        {
+            if (IsBusy) return;
             System.Diagnostics.Debug.WriteLine("Running the worker...");
 
             var toDownload = DB.Current.entries.Where(e => e.ThumbnailHasBeenDownloaded == false).OrderByDescending(e => e.DateInsert).Take(5).ToList();
@@ -79,6 +86,7 @@ namespace CollectorRT.Data.Downloaders
 
                         if (url != null && url.Attributes["content"].Value != null)
                         {
+                            System.Diagnostics.Debug.WriteLine("-- follow link found");
                             entry.Link = url.Attributes["content"].Value;
                         }
 
@@ -94,6 +102,7 @@ namespace CollectorRT.Data.Downloaders
 
                             if (summary != null && summary.Attributes["content"] != null)
                             {
+                                System.Diagnostics.Debug.WriteLine("-- summary found");
                                 string s = summary.Attributes["content"].Value;
                                 if (s != null && s.Length > 10)
                                 {
@@ -107,6 +116,7 @@ namespace CollectorRT.Data.Downloaders
                         var img = doc.DocumentNode.Descendants("//meta[@name='twitter:image']").FirstOrDefault();
                         if (img == null || img.Attributes["content"] == null)
                         {
+                            System.Diagnostics.Debug.WriteLine("-- image found");
                             img = doc.DocumentNode.Descendants("//meta[@property='og:image']").FirstOrDefault();
 
                             if (img == null)
@@ -118,7 +128,7 @@ namespace CollectorRT.Data.Downloaders
                         if (img != null && img.Attributes["content"] != null)
                         {
                             var imgUrl = img.Attributes["content"].Value;
-                            System.Diagnostics.Debug.WriteLine("Image found: " + imgUrl);
+                            System.Diagnostics.Debug.WriteLine("-- image found for real " + imgUrl);
 
                             entry.ThumbnailURL = System.Net.WebUtility.HtmlDecode(imgUrl);
                         }
