@@ -63,7 +63,7 @@ namespace CollectorRT.Data
             fixedString = StripHtml(Regex.Replace(value.ToString(), "<br ?/?>|</p>", "\r\n"));
 
             // Remove encoded HTML characters.
-            //fixedString = HttpUtility.HtmlDecode(fixedString).Trim();
+            fixedString = System.Net.WebUtility.HtmlDecode(fixedString).Trim();
 
             strLength = fixedString.ToString().Length;
 
