@@ -111,6 +111,7 @@
     <Compile Include="Data\Account.cs" />
     <Compile Include="Data\API.cs" />
     <Compile Include="Data\DB.cs" />
+    <Compile Include="Data\Downloaders\ContentDownloader.cs" />
     <Compile Include="Data\Downloaders\Downloader.cs" />
     <Compile Include="Data\Downloaders\RSSDownloader.cs" />
     <Compile Include="Data\Downloaders\TumblrDownloader.cs" />

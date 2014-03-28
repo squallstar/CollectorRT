@@ -202,53 +202,5 @@ namespace CollectorRT.Data.Downloaders
 
             return i;
         }
- 
-        public static string CleanString(string value, int maxLength = 1000)
-        {
-            if (value == null) return null;
-
-            int strLength = 0;
-            string fixedString = "";
-
-            fixedString = StripHtml(Regex.Replace(value.ToString(), "<br ?/?>|</p>", "\r\n"));
-
-            // Remove encoded HTML characters.
-            //fixedString = HttpUtility.HtmlDecode(fixedString).Trim();
-
-            strLength = fixedString.ToString().Length;
-
-            // Some feed management tools include an image tag in the Description field of an RSS feed, 
-            // so even if the Description field (and thus, the Summary property) is not populated, it could still contain HTML. 
-            // Due to this, after we strip tags from the string, we should return null if there is nothing left in the resulting string. 
-            if (strLength == 0)
-            {
-                return null;
-            }
-
-            // Truncate the text if it is too long. 
-            else if (strLength > maxLength)
-            {
-                try
-                {
-                    fixedString = fixedString.Substring(0, maxLength);
-
-                    // Unless we take the next step, the string trunrancation could occur in the middle of a word.
-                    // Using LastIndexOf we can find the last space character in the string and truncate there. 
-                    int idx = fixedString.LastIndexOf(" ");
-                    if (fixedString.Length > idx)
-                    {
-                        fixedString = fixedString.Substring(0, idx);
-                    }
-                }
-                catch (Exception)
-                {
-                    //Nothing
-                }
-
-                fixedString += "...";
-            }
-
-            return fixedString;
-        }
     }
 }

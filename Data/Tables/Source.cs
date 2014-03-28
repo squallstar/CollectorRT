@@ -20,6 +20,8 @@ namespace CollectorRT.Data.Tables
         public int UnreadEntries { get; set; }
         public DateTime DateUpdate { get; set; }
 
+        private static int OutDatedAfterMinutes = 5;
+
         private string _urlSeparator = "\n";
 
         public static int UpToDate = -1;
@@ -43,7 +45,7 @@ namespace CollectorRT.Data.Tables
 
         public async Task<int> update(bool force = false)
         {
-            if (!force && DateUpdate.Ticks >= DateTime.Now.AddMinutes(-15).Ticks)
+            if (!force && DateUpdate.Ticks >= DateTime.Now.AddMinutes(-OutDatedAfterMinutes).Ticks)
             {
                 System.Diagnostics.Debug.WriteLine("No need to update source " + ID);
                 return Source.UpToDate;
@@ -54,6 +56,7 @@ namespace CollectorRT.Data.Tables
             int newArticles = 0;
 
             if (Kind == "rss") newArticles = await RSSDownloader.UpdateSource(this);
+            else if (Kind == "tumblr") newArticles = await TumblrDownloader.UpdateSource(this);
 
             UnreadEntries += newArticles;
             DateUpdate = DateTime.Now;

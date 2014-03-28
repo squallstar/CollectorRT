@@ -1,4 +1,5 @@
 ﻿using CollectorRT.Data;
+using CollectorRT.Data.Downloaders;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,6 +28,7 @@ namespace CollectorRT
     {
         public Account account;
         public DB db;
+        public ContentDownloader contentDownloader;
 
         /// <summary>
         /// Inizializza l'oggetto Application singleton.  Si tratta della prima riga del codice creato
@@ -61,6 +63,7 @@ namespace CollectorRT
             {
                 this.account = new Account();
                 this.db = new DB();
+                this.contentDownloader = new ContentDownloader();
 
                 // Creare un frame che agisca da contesto di navigazione e passare alla prima pagina
                 rootFrame = new Frame();

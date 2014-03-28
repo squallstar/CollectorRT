@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -48,17 +49,25 @@ namespace CollectorRT
 
         public async void UpdateSources()
         {
+            int x = tiles.Count;
+
             foreach (var tile in tiles)
             {
-                var updateSource = await tile.source.update();
+                toUpdateSources.Text = String.Format("{0}", x);
+
+                // Update the source on a background thread
+                var updateSource = await Task.Run(() => tile.source.update());
 
                 if (updateSource != Source.UpToDate)
                 {
                     tile.UpdateEntry();
                     tile.UpdateDisplayedContent();
                 }
+
+                x--;
             }
 
+            toUpdateSources.Text = "";
             loader.IsActive = false;
         }
     }
