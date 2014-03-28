@@ -1,4 +1,5 @@
 ﻿using CollectorRT.Data;
+using CollectorRT.Data.Downloaders;
 using CollectorRT.Data.Tables;
 using CollectorRT.UI;
 using System;
@@ -69,6 +70,8 @@ namespace CollectorRT
 
             toUpdateSources.Text = "";
             loader.IsActive = false;
+
+            ContentDownloader.Current.Run();
         }
     }
 }

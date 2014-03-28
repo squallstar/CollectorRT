@@ -9,7 +9,7 @@ using System.Net.Http;
 
 namespace CollectorRT.Data
 {
-    class Downloader
+    public class Downloader
     {
         protected static int maxTextLength = 1000;
 

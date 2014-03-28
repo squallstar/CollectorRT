@@ -61,9 +61,12 @@ namespace CollectorRT
             // assicurarsi solo che la finestra sia attiva
             if (rootFrame == null)
             {
-                this.account = new Account();
-                this.db = new DB();
-                this.contentDownloader = new ContentDownloader();
+                account = new Account();
+                db = new DB();
+
+                contentDownloader = new ContentDownloader();
+                contentDownloader.Run();
+
 
                 // Creare un frame che agisca da contesto di navigazione e passare alla prima pagina
                 rootFrame = new Frame();
