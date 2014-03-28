@@ -1,4 +1,5 @@
 ﻿using CollectorRT.Data.Tables;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace CollectorRT.Data.Downloaders
         {
             if (IsBusy) return;
 
-            var toDownload = DB.Current.entries.Where(e => e.ThumbnailHasBeenDownloaded == false).Take(5).ToList();
+            var toDownload = DB.Current.entries.Where(e => e.ThumbnailHasBeenDownloaded == false).OrderByDescending(e => e.DateInsert).Take(5).ToList();
             if (toDownload.Count == 0) return;
 
             _IsBusy = true;
@@ -50,15 +51,34 @@ namespace CollectorRT.Data.Downloaders
         {
             if (entry.Kind != "facebook" || (entry.AuthorUsername == null || entry.AuthorUsername == ""))
             {
-                var data = await DownloadContentFromUrl(entry.Link);
-
-                if (data != null)
+                try
                 {
+                    var data = await DownloadContentFromUrl(entry.Link);
 
+                    if (data != null)
+                    {
+                        HtmlDocument doc = new HtmlDocument();
+                        doc.LoadHtml(data);
+
+                        var url = doc.DocumentNode.Descendants("//meta[@property='og:url']").FirstOrDefault();
+
+                     
+                        if (url == null)
+                        {
+                            url = doc.DocumentNode.Descendants("//meta[@name='og:url']").FirstOrDefault();
+                        }
+
+                        if (url != null && url.Attributes["content"].Value != null)
+                        {
+                            entry.Link = url.Attributes["content"].Value;
+                        }
+                    }
+                }
+                finally
+                {
+                    entry.ThumbnailHasBeenDownloaded = true;
                 }
             }
-
-            entry.ThumbnailHasBeenDownloaded = true;
 
             return true;
         }
