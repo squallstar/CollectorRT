@@ -41,8 +41,25 @@ namespace CollectorRT
                 tiles.Add(tile);
 
                 collectionsGrid.Children.Add(tile);
-                //collectionsGrid.Items.Add(tile);
             }
+
+            UpdateSources();
+        }
+
+        public async void UpdateSources()
+        {
+            foreach (var tile in tiles)
+            {
+                var updateSource = await tile.source.update();
+
+                if (updateSource != Source.UpToDate)
+                {
+                    tile.UpdateEntry();
+                    tile.UpdateDisplayedContent();
+                }
+            }
+
+            loader.IsActive = false;
         }
     }
 }

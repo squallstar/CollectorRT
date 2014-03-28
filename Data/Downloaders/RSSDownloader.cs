@@ -12,26 +12,29 @@ namespace CollectorRT.Data.Downloaders
 {
     class RSSDownloader : Downloader
     {
-        public static async Task<bool> UpdateSource(Source source)
+        public static async Task<int> UpdateSource(Source source)
         {
+            int newArticles = 0;
+
             try
             {
                 foreach (var url in source.Urls)
                 {
-                    await GetFeedAsync(url, source);
+                    newArticles += await GetFeedAsync(url, source);
                 }
-                return true;
             }   
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
             }
 
-            return false;
+            return newArticles;
         }
 
-        private static async Task<bool> GetFeedAsync(string feedUrl, Source source)
+        private static async Task<int> GetFeedAsync(string feedUrl, Source source)
         {
+            int newArticles = 0;
+
             SyndicationClient client = new SyndicationClient
             {
                 Timeout = 6000
@@ -45,18 +48,17 @@ namespace CollectorRT.Data.Downloaders
 
                 SyndicationFeed feed = await client.RetrieveFeedAsync(feedUri);
 
-                AddEntriesFromFeed(feed, source, feedUrl);
+                newArticles = AddEntriesFromFeed(feed, source, feedUrl);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return false;
             }
 
-            return true;
+            return newArticles;
         }
 
-        private static void AddEntriesFromFeed (SyndicationFeed feed, Source source, string sourceUrl)
+        private static int AddEntriesFromFeed (SyndicationFeed feed, Source source, string sourceUrl)
         {
             int i = 0;
 
@@ -107,8 +109,6 @@ namespace CollectorRT.Data.Downloaders
                         System.Diagnostics.Debug.WriteLine("Skipping entry " + itemId);
                         continue;
                     }
-
-                    i++;
 
                     Entry entry = new Entry
                     {
@@ -184,9 +184,13 @@ namespace CollectorRT.Data.Downloaders
 
                     if (entry.ThumbnailURL != null) entry.ThumbnailHasBeenDownloaded = true;
 
-                    DB.Current.connection.Insert(entry);
+                    if (DB.Current.connection.Insert(entry) > 0)
+                    {
+                        i++;
+                        System.Diagnostics.Debug.WriteLine("Article inserted " + entry.ID);
+                    }
 
-                    System.Diagnostics.Debug.WriteLine("Article inserted " + entry.ID);
+                    
                 }
                 catch (Exception e)
                 {
@@ -195,6 +199,8 @@ namespace CollectorRT.Data.Downloaders
             }
 
             System.Diagnostics.Debug.WriteLine(String.Format("{0} articles added for source {1}", i, sourceUrl));
+
+            return i;
         }
  
         public static string CleanString(string value, int maxLength = 1000)

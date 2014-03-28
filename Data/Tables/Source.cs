@@ -22,6 +22,8 @@ namespace CollectorRT.Data.Tables
 
         private string _urlSeparator = "\n";
 
+        public static int UpToDate = -1;
+
         public string[] Urls
         {
             get
@@ -39,42 +41,34 @@ namespace CollectorRT.Data.Tables
             }
         }
 
-        public async Task<bool> update(bool force = false)
+        public async Task<int> update(bool force = false)
         {
             if (!force && DateUpdate.Ticks >= DateTime.Now.AddMinutes(-15).Ticks)
             {
                 System.Diagnostics.Debug.WriteLine("No need to update source " + ID);
-                return true;
+                return Source.UpToDate;
             }
 
             System.Diagnostics.Debug.WriteLine("Updating source " + ID);
 
-            bool success = false;
+            int newArticles = 0;
 
-            if (Kind == "rss") success = await RSSDownloader.UpdateSource(this);
+            if (Kind == "rss") newArticles = await RSSDownloader.UpdateSource(this);
 
-            if (success)
-            {
-                DateUpdate = DateTime.Now;
-                DB.Current.connection.Update(this);
+            UnreadEntries += newArticles;
+            DateUpdate = DateTime.Now;
+            DB.Current.connection.Update(this);
 
-                System.Diagnostics.Debug.WriteLine("Updating source: done!");
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("Cannot update the source of kind " + Kind);
-            }
-
-            return success;
+            return newArticles;
         }
 
         public Entry FirstEntryWithImage()
         {
-            var entry = DB.Current.entries.Where(e => e.Source == this.ID && e.ThumbnailURL != null).FirstOrDefault();
+            var entry = DB.Current.entries.Where(e => e.Source == this.ID && e.ThumbnailURL != null).OrderByDescending(e => e.DateInsert).FirstOrDefault();
 
             if (entry == null)
             {
-                return DB.Current.entries.Where(e => e.Source == this.ID).FirstOrDefault();
+                return DB.Current.entries.Where(e => e.Source == this.ID).OrderByDescending(e => e.DateInsert).FirstOrDefault();
             }
 
             return entry;

@@ -12,9 +12,10 @@
             <RowDefinition Height="100"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
+        <ProgressRing x:Name="loader" Canvas.ZIndex="1" Width="30" Height="30" Foreground="#BC2D30" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,50,50,0" IsActive="True"></ProgressRing>
         <Image Margin="17,20,0,-10" Source="Assets/Logo-big.png" HorizontalAlignment="Left" VerticalAlignment="top"/>
         <ScrollViewer Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <VariableSizedWrapGrid Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" ItemWidth="330" ItemHeight="330" x:Name="collectionsGrid" Margin="30"></VariableSizedWrapGrid>
+            <VariableSizedWrapGrid Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" ItemWidth="250" ItemHeight="250" x:Name="collectionsGrid" Margin="30"></VariableSizedWrapGrid>
         </ScrollViewer>
     </Grid>
 </Page>

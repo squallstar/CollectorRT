@@ -19,11 +19,13 @@ namespace CollectorRT.UI
         private Entry _entry;
 
         private Image backgroundImage;
+        private TextBlock title;
+        private TextBlock content;
 
         public SourceTile(Source source)
         {
             _source = source;
-            _entry = source.FirstEntryWithImage();
+            UpdateEntry();
 
             BuildTile();
         }
@@ -36,6 +38,11 @@ namespace CollectorRT.UI
             }
         }
 
+        public void UpdateEntry()
+        {
+            _entry = source.FirstEntryWithImage();
+        }
+
         public Entry entry
         {
             get
@@ -46,16 +53,8 @@ namespace CollectorRT.UI
 
         private void BuildTile()
         {
-            Background = new SolidColorBrush(Colors.White);
-
             if (source.ID % 3 == 0)
             {
-                SetValue(VariableSizedWrapGrid.ColumnSpanProperty, 2);
-            }
-
-            if (source.ID % 7 == 0)
-            {
-                SetValue(VariableSizedWrapGrid.RowSpanProperty, 2);
                 SetValue(VariableSizedWrapGrid.ColumnSpanProperty, 2);
             }
 
@@ -71,10 +70,11 @@ namespace CollectorRT.UI
 
             if (entry != null)
             {
-                var content = new TextBlock
+                content = new TextBlock
                 {
-                    Text = entry.Title.Length > 100 ? entry.Title.Substring(0,99) + "..." : entry.Title,
-                    FontSize = 18,
+                    FontSize = 21,
+                    LineHeight = 25,
+                    FontFamily = new FontFamily("/Assets/ProximaNova-R.ttf#Proxima Nova"),
                     TextWrapping = Windows.UI.Xaml.TextWrapping.Wrap,
                     Foreground = new SolidColorBrush(Colors.White),
                     Margin = new Thickness(20, 15, 20, -5)
@@ -83,11 +83,11 @@ namespace CollectorRT.UI
                 bg.Children.Add(content);
             }
 
-            var title = new TextBlock
+            title = new TextBlock
             {
                 Text = source.Title.ToUpper(),
-                FontSize = 12,
-                FontWeight = FontWeights.Bold,
+                FontFamily = new FontFamily("/Assets/ProximaNova-B.ttf#Proxima Nova"),
+                FontSize = 15,
                 Foreground = new SolidColorBrush(Colors.White),
                 Margin = new Thickness(20,15,20,15)
             };
@@ -95,14 +95,31 @@ namespace CollectorRT.UI
             bg.Children.Add(title);
             Children.Add(bg);
 
-            this.backgroundImage = new Image();
-            this.backgroundImage.Stretch = Stretch.UniformToFill;
-            this.backgroundImage.Opacity = 0.85;
+            backgroundImage = new Image();
+            backgroundImage.Stretch = Stretch.UniformToFill;
+            backgroundImage.Opacity = 0.85;
             this.Children.Add(this.backgroundImage);
 
-            if (entry != null && entry.ThumbnailURL != null)
+            UpdateDisplayedContent();
+        }
+
+        public void UpdateDisplayedContent()
+        {
+            int descriptionLength = GetValue(VariableSizedWrapGrid.ColumnSpanProperty).ToString() == "1" ? 70 : 130;
+
+            if (entry != null)
             {
-                this.backgroundImage.Source = new BitmapImage(new Uri(entry.ThumbnailURL));
+                content.Text = entry.Title.Length > descriptionLength ? entry.Title.Substring(0, descriptionLength-1) + "..." : entry.Title;
+
+                if (entry.ThumbnailURL != null)
+                {
+                    Background = new SolidColorBrush(Colors.White);
+                    this.backgroundImage.Source = new BitmapImage(new Uri(entry.ThumbnailURL));
+                }
+                else
+                {
+                    Background = new SolidColorBrush(Color.FromArgb(255, 188, 45, 48));
+                }
             }
             else
             {

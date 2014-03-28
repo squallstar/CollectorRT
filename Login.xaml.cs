@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Networking.Connectivity;
@@ -36,7 +37,7 @@ namespace CollectorRT
 
                 if (profile.GetNetworkConnectivityLevel() >= NetworkConnectivityLevel.InternetAccess)
                 {
-                    LoadCollections();
+                    SyncAccountAndProceed();
                 }
                 else
                 {
@@ -45,12 +46,18 @@ namespace CollectorRT
             }
         }
 
+        private async void SyncAccountAndProceed()
+        {
+            await SyncAccount();
+            Proceed();
+        }
+
         private void Proceed()
         {
             this.Frame.Navigate(typeof(CollectionsView));
         }
 
-        private async void LoadCollections()
+        private async Task<bool> SyncAccount()
         {
             txtDescription.Visibility = Visibility.Collapsed;
             btnLogin.Visibility = Visibility.Collapsed;
@@ -59,7 +66,13 @@ namespace CollectorRT
             loader.IsActive = true;
             txtMessage.Visibility = Visibility.Visible;
 
-            var syncSuccess = await Account.Current.Sync();
+            return await Account.Current.Sync();
+        }
+
+        private async void LoadCollections()
+        {
+
+            var syncSuccess = await SyncAccount();
             if (syncSuccess)
             {
                 GetCollectionArticles();

@@ -129,6 +129,8 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="Assets\ProximaNova-B.ttf" />
+    <Content Include="Assets\ProximaNova-R.ttf" />
     <None Include="CollectorRT_TemporaryKey.pfx" />
     <None Include="packages.config" />
   </ItemGroup>
