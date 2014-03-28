@@ -41,7 +41,7 @@ namespace CollectorRT.Data.Tables
 
         public async Task<bool> update(bool force = false)
         {
-            if (!force && DateUpdate.Ticks >= DateTime.Now.AddMinutes(-5).Ticks)
+            if (!force && DateUpdate.Ticks >= DateTime.Now.AddMinutes(-15).Ticks)
             {
                 System.Diagnostics.Debug.WriteLine("No need to update source " + ID);
                 return true;

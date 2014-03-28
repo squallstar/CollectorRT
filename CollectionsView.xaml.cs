@@ -40,7 +40,8 @@ namespace CollectorRT
                 var tile = new SourceTile(source);
                 tiles.Add(tile);
 
-                collectionsGrid.Items.Add(tile);
+                collectionsGrid.Children.Add(tile);
+                //collectionsGrid.Items.Add(tile);
             }
         }
     }

@@ -13,7 +13,8 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Image Margin="17,20,0,-10" Source="Assets/Logo-big.png" HorizontalAlignment="Left" VerticalAlignment="top"/>
-        <GridView Grid.Row="1" x:Name="collectionsGrid" Margin="30"></GridView>
-        
+        <ScrollViewer Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <VariableSizedWrapGrid Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" ItemWidth="330" ItemHeight="330" x:Name="collectionsGrid" Margin="30"></VariableSizedWrapGrid>
+        </ScrollViewer>
     </Grid>
 </Page>

@@ -46,9 +46,20 @@ namespace CollectorRT.UI
 
         private void BuildTile()
         {
-            Width = 300;
-            Height = 200;
             Background = new SolidColorBrush(Colors.White);
+
+            if (source.ID % 3 == 0)
+            {
+                SetValue(VariableSizedWrapGrid.ColumnSpanProperty, 2);
+            }
+
+            if (source.ID % 7 == 0)
+            {
+                SetValue(VariableSizedWrapGrid.RowSpanProperty, 2);
+                SetValue(VariableSizedWrapGrid.ColumnSpanProperty, 2);
+            }
+
+            Margin = new Thickness(0, 0, 20, 20);
 
             var bg = new StackPanel
             {
