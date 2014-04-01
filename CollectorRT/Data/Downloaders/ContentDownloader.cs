@@ -67,9 +67,11 @@ namespace CollectorRT.Data.Downloaders
             {
                 try
                 {
-                    System.Diagnostics.Debug.WriteLine("Downloading " + entry.Link);
+                    var entryUrl = entry.Link;
 
-                    var data = await DownloadContentFromUrl(entry.Link);
+                    System.Diagnostics.Debug.WriteLine("Downloading " + entryUrl);
+
+                    var data = await DownloadContentFromUrl(entryUrl);
 
                     if (data != null)
                     {
@@ -132,6 +134,29 @@ namespace CollectorRT.Data.Downloaders
                             System.Diagnostics.Debug.WriteLine("-- image found for real " + imgUrl);
 
                             entry.ThumbnailURL = System.Net.WebUtility.HtmlDecode(imgUrl);
+
+                            if (entry.ThumbnailURL.StartsWith("/"))
+                            {
+                                var x = new Uri(entryUrl);
+
+                                if (entry.ThumbnailURL.StartsWith("//"))
+                                {
+                                    // URL without protocol
+                                    entry.ThumbnailURL = String.Format("{0}:{1}", x.Scheme,entry.ThumbnailURL);
+
+                                    System.Diagnostics.Debug.WriteLine("Image url resolved to absolute: " + entry.ThumbnailURL);
+                                }
+                                else
+                                {
+                                    // Relative URL
+                                    entry.ThumbnailURL = String.Format("{0}://{1}{2}", x.Scheme, x.Host, entry.ThumbnailURL);
+
+                                    System.Diagnostics.Debug.WriteLine("Image url resolved to absolute: " + entry.ThumbnailURL);
+                                }
+                                
+                               
+                                
+                            }
                         }
                     }
                 }

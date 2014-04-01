@@ -43,6 +43,28 @@ namespace CollectorRT.UI
             _entry = source.FirstEntryWithImage();
         }
 
+        public void UpdateIfChanged()
+        {
+            var previousEntry = _entry;
+            this.UpdateEntry();
+
+            if (_entry != null)
+            {
+                if (previousEntry != null)
+                {
+                    //Compare
+                    if (previousEntry.ID != _entry.ID || previousEntry.ThumbnailURL != _entry.ThumbnailURL)
+                    {
+                        this.UpdateDisplayedContent();
+                    }
+                }
+                else
+                {
+                    this.UpdateDisplayedContent();
+                }
+            }
+        }
+
         public Entry entry
         {
             get
@@ -113,8 +135,15 @@ namespace CollectorRT.UI
 
                 if (entry.ThumbnailURL != null)
                 {
-                    Background = new SolidColorBrush(Colors.White);
-                    this.backgroundImage.Source = new BitmapImage(new Uri(entry.ThumbnailURL));
+                    try
+                    {
+                        Background = new SolidColorBrush(Colors.White);
+                        this.backgroundImage.Source = new BitmapImage(new Uri(entry.ThumbnailURL));
+                    }
+                    catch (Exception)
+                    {
+                        Background = new SolidColorBrush(Color.FromArgb(255, 188, 45, 48));
+                    }
                 }
                 else
                 {
