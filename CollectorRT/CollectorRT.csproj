@@ -108,6 +108,10 @@
     <Compile Include="CollectionsView.xaml.cs">
       <DependentUpon>CollectionsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\NavigationHelper.cs" />
+    <Compile Include="Common\ObservableDictionary.cs" />
+    <Compile Include="Common\RelayCommand.cs" />
+    <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Data\Account.cs" />
     <Compile Include="Data\API.cs" />
     <Compile Include="Data\DB.cs" />
@@ -122,6 +126,9 @@
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SingleCollectionView.xaml.cs">
+      <DependentUpon>SingleCollectionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
     <Compile Include="UI\SourceTile.cs" />
@@ -132,6 +139,11 @@
     </AppxManifest>
     <Content Include="Assets\ProximaNova-B.ttf" />
     <Content Include="Assets\ProximaNova-R.ttf" />
+    <Content Include="Common\ReadMe.txt" />
+    <Page Include="SingleCollectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <None Include="CollectorRT_TemporaryKey.pfx" />
     <None Include="packages.config" />
   </ItemGroup>

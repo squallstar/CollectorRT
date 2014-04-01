@@ -1,4 +1,5 @@
-﻿using CollectorRT.Data;
+﻿using CollectorRT.Common;
+using CollectorRT.Data;
 using CollectorRT.Data.Downloaders;
 using CollectorRT.Data.Tables;
 using CollectorRT.UI;
@@ -32,6 +33,17 @@ namespace CollectorRT
 
         private DispatcherTimer timer;
 
+        private NavigationHelper navigationHelper;
+
+        /// <summary>
+        /// NavigationHelper viene utilizzato in oggi pagina per favorire la navigazione e 
+        /// la gestione del ciclo di vita dei processi
+        /// </summary>
+        public NavigationHelper NavigationHelper
+        {
+            get { return this.navigationHelper; }
+        }
+
         public CollectionsView()
         {
             this.InitializeComponent();
@@ -44,6 +56,7 @@ namespace CollectorRT
             foreach (var source in sources)
             {
                 var tile = new SourceTile(source);
+                tile.Tapped += tile_Tapped;
                 tiles.Add(tile);
 
                 collectionsGrid.Children.Add(tile);
@@ -52,14 +65,8 @@ namespace CollectorRT
             timer = new DispatcherTimer();
             timer.Tick += timer_Tick;
             timer.Interval = new TimeSpan(0, 0, 0, 13);
-            timer.Start();
 
             UpdateSources();
-        }
-
-        ~CollectionsView()
-        {
-            timer.Stop();
         }
 
         void timer_Tick(object sender, object e)
@@ -95,6 +102,23 @@ namespace CollectorRT
             loader.IsActive = false;
 
             ContentDownloader.Current.Run();
+        }
+
+        void tile_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(SingleCollectionView), (sender as SourceTile).source);
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            //navigationHelper.OnNavigatedTo(e);
+            timer.Start();
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            //navigationHelper.OnNavigatedFrom(e);
+            timer.Stop();
         }
     }
 }
