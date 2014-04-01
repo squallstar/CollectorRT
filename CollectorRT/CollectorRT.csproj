@@ -138,8 +138,12 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="Assets\BadgeLogo.scale-100.png" />
     <Content Include="Assets\ProximaNova-B.ttf" />
     <Content Include="Assets\ProximaNova-R.ttf" />
+    <Content Include="Assets\Square310x310Logo.scale-100.png" />
+    <Content Include="Assets\Square70x70Logo.scale-100.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-100.png" />
     <Content Include="Common\ReadMe.txt" />
     <Page Include="SingleCollectionView.xaml">
       <SubType>Designer</SubType>

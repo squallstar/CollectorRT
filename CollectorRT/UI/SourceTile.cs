@@ -80,7 +80,7 @@ namespace CollectorRT.UI
                 SetValue(VariableSizedWrapGrid.ColumnSpanProperty, 2);
             }
 
-            Margin = new Thickness(0, 0, 20, 20);
+            Margin = new Thickness(0, 0, 10, 10);
 
             var bg = new StackPanel
             {
@@ -92,12 +92,12 @@ namespace CollectorRT.UI
 
             content = new TextBlock
             {
-                FontSize = 21,
-                LineHeight = 25,
+                FontSize = 18,
+                LineHeight = 23,
                 FontFamily = new FontFamily("/Assets/ProximaNova-R.ttf#Proxima Nova"),
                 TextWrapping = Windows.UI.Xaml.TextWrapping.Wrap,
                 Foreground = new SolidColorBrush(Colors.White),
-                Margin = new Thickness(20, 15, 20, -5),
+                Margin = new Thickness(15, 15, 15, -5),
                 Visibility = Visibility.Collapsed
             };
 
@@ -107,9 +107,9 @@ namespace CollectorRT.UI
             {
                 Text = source.Title.ToUpper(),
                 FontFamily = new FontFamily("/Assets/ProximaNova-B.ttf#Proxima Nova"),
-                FontSize = 15,
+                FontSize = 13,
                 Foreground = new SolidColorBrush(Colors.White),
-                Margin = new Thickness(20,15,20,15)
+                Margin = new Thickness(15,15,15,15)
             };
 
             bg.Children.Add(title);
@@ -125,7 +125,7 @@ namespace CollectorRT.UI
 
         public void UpdateDisplayedContent()
         {
-            int descriptionLength = GetValue(VariableSizedWrapGrid.ColumnSpanProperty).ToString() == "1" ? 70 : 130;
+            int descriptionLength = GetValue(VariableSizedWrapGrid.ColumnSpanProperty).ToString() == "1" ? 40 : 130;
 
             if (entry != null)
             {

@@ -14,14 +14,14 @@
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="Black">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="80"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Canvas.ZIndex="1" Width="50" Height="50" Margin="0,50,50,0" HorizontalAlignment="Right" VerticalAlignment="Top">
@@ -30,7 +30,7 @@
         </Grid>
         <Image Margin="17,20,0,-10" Source="Assets/Logo-big.png" HorizontalAlignment="Left" VerticalAlignment="top"/>
         <ScrollViewer Grid.Row="1" VerticalAlignment="Stretch" VerticalContentAlignment="Center" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto">
-            <VariableSizedWrapGrid ItemWidth="250" ItemHeight="250" x:Name="collectionsGrid" Margin="30"></VariableSizedWrapGrid>
+            <VariableSizedWrapGrid ItemWidth="200" ItemHeight="200" x:Name="collectionsGrid" Margin="30"></VariableSizedWrapGrid>
         </ScrollViewer>
     </Grid>
 </Page>
