@@ -11,6 +11,8 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Networking.Connectivity;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -33,22 +35,11 @@ namespace CollectorRT
 
         private DispatcherTimer timer;
 
-        private NavigationHelper navigationHelper;
-
-        /// <summary>
-        /// NavigationHelper viene utilizzato in oggi pagina per favorire la navigazione e 
-        /// la gestione del ciclo di vita dei processi
-        /// </summary>
-        public NavigationHelper NavigationHelper
-        {
-            get { return this.navigationHelper; }
-        }
-
         public CollectionsView()
         {
             this.InitializeComponent();
 
-            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
             tiles = new List<SourceTile>();
             sources = DB.Current.sources.OrderByDescending(s => s.DateUpdate).ToList();
@@ -79,26 +70,36 @@ namespace CollectorRT
             }
         }
 
-        public async void UpdateSources()
+        public async void UpdateSources(bool force = false)
         {
-            int x = tiles.Count;
+            ConnectionProfile profile = NetworkInformation.GetInternetConnectionProfile();
 
-            foreach (var tile in tiles)
+            if (profile.GetNetworkConnectivityLevel() >= NetworkConnectivityLevel.InternetAccess)
             {
-                toUpdateSources.Text = String.Format("{0}", x);
+                int x = tiles.Count;
 
-                // Update the source on a background thread
-                var updateSource = await Task.Run(() => tile.source.update());
+                this.btnRefresh.IsEnabled = false;
+                this.btnRefresh.Label = "Fetching...";
 
-                if (updateSource != Source.UpToDate)
+                foreach (var tile in tiles)
                 {
-                    tile.UpdateIfChanged();
-                }
+                    toUpdateSources.Text = String.Format("{0}", x);
 
-                x--;
+                    // Update the source on a background thread
+                    var updateSource = await Task.Run(() => tile.source.update(force));
+
+                    if (updateSource != Source.UpToDate)
+                    {
+                        tile.UpdateIfChanged();
+                    }
+
+                    x--;
+                }
             }
 
             toUpdateSources.Text = "";
+            this.btnRefresh.IsEnabled = true;
+            this.btnRefresh.Label = "Sync/Refresh";
             loader.IsActive = false;
 
             ContentDownloader.Current.Run();
@@ -119,6 +120,43 @@ namespace CollectorRT
         {
             //navigationHelper.OnNavigatedFrom(e);
             timer.Stop();
+        }
+
+        private async void SyncRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            this.BottomAppBar.IsOpen = false;
+            this.loader.IsActive = true;
+            this.btnRefresh.IsEnabled = false;
+            this.btnRefresh.Label = "Syncing...";
+
+            await Account.Current.Sync();
+            UpdateSources(true);
+        }
+
+        private async void Logout_Click(object sender, RoutedEventArgs e)
+        {
+            MessageDialog msgDialog = new MessageDialog("Do you want to log out from your Collector account?\r\n\r\nTo clean up temporary files on this device, the app will also exit.", "Logout");
+
+            UICommand okBtn = new UICommand("Log out");
+            okBtn.Invoked = Logout_Confirm_Click;
+            msgDialog.Commands.Add(okBtn);
+
+            msgDialog.Commands.Add(new UICommand("Cancel"));
+
+            await msgDialog.ShowAsync();
+        }
+
+        private void Logout_Confirm_Click(IUICommand command)
+        {
+            this.BottomAppBar.IsOpen = false;
+
+            ContentDownloader.Current.Stop();
+            Account.Current.Logout();
+
+            DB.Current.connection.DeleteAll<Entry>();
+            DB.Current.connection.DeleteAll<Source>();
+
+            Application.Current.Exit();
         }
     }
 }

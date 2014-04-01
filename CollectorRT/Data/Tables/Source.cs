@@ -18,6 +18,7 @@ namespace CollectorRT.Data.Tables
         public string Url { get; set; }
         public string Description { get; set; }
         public int UnreadEntries { get; set; }
+
         public DateTime DateUpdate { get; set; }
 
         private static int OutDatedAfterMinutes = 5;

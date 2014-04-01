@@ -7,6 +7,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <Page.BottomAppBar>
+        <CommandBar Background="#be2b2b">
+            <AppBarButton x:Name="btnRefresh" Foreground="White" Label="Sync/Refresh" Icon="Sync" Click="SyncRefresh_Click"/>
+            <AppBarButton x:Name="btnLogout" Foreground="White" Label="Logout" Icon="ContactPresence" Click="Logout_Click"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ChildrenTransitions>
             <TransitionCollection>

@@ -31,6 +31,11 @@ namespace CollectorRT.Data.Downloaders
             }
         }
 
+        public void Stop()
+        {
+            //http://stackoverflow.com/questions/10134310/how-to-cancel-a-task-in-await
+        }
+
         /// <summary>
         /// Runs the worker on the background thread
         /// </summary>

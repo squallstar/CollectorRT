@@ -31,6 +31,9 @@ namespace CollectorRT
             this.InitializeComponent();
             txtMessage.Visibility = Visibility.Collapsed;
 
+            txtEmail.Text = "";
+            txtPassword.Password = "";
+
             if (Account.Current.isLoggedIn)
             {
                 ConnectionProfile profile = NetworkInformation.GetInternetConnectionProfile();
@@ -89,7 +92,7 @@ namespace CollectorRT
                 txtDescription.Visibility = Visibility.Visible;
                 txtEmail.IsEnabled = true;
                 txtPassword.IsEnabled = true;
-                txtPassword.Text = "";
+                txtPassword.Password = "";
                 btnLogin.IsEnabled = true;
                 loader.IsActive = false;
                 txtMessage.Visibility = Visibility.Collapsed;
@@ -103,13 +106,13 @@ namespace CollectorRT
             btnLogin.IsEnabled = false;
             loader.IsActive = true;
 
-            var success = await (Application.Current as App).account.Login(txtEmail.Text, txtPassword.Text);
+            var success = await (Application.Current as App).account.Login(txtEmail.Text, txtPassword.Password);
 
             if (!success)
             {
                 txtEmail.IsEnabled = true;
                 txtPassword.IsEnabled = true;
-                txtPassword.Text = "";
+                txtPassword.Password = "";
                 btnLogin.IsEnabled = true;
                 loader.IsActive = false;
 
@@ -136,13 +139,29 @@ namespace CollectorRT
 
             foreach (var collection in collections)
             {
-                txtMessage.Text = String.Format("Fetching articles...\r\n{0} collections left", toUpdate);
+                txtMessage.Text = String.Format("Fetching data for the first time...\r\n{0} collections left", toUpdate);
                 await collection.update();
                 toUpdate--;
             }
 
             txtMessage.Text = "Clearing up...";
             Proceed();
+        }
+
+        private void txtPassword_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                btnLogin_Click(null, null);
+            }
+        }
+
+        private void txtEmail_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                txtPassword.Focus(FocusState.Keyboard);
+            }
         }
     }
 }
