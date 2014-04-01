@@ -30,9 +30,13 @@ namespace CollectorRT
         private List<Source> sources;
         private List<SourceTile> tiles;
 
+        private DispatcherTimer timer;
+
         public CollectionsView()
         {
             this.InitializeComponent();
+
+            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
 
             tiles = new List<SourceTile>();
             sources = DB.Current.sources.OrderByDescending(s => s.DateUpdate).ToList();
@@ -45,7 +49,27 @@ namespace CollectorRT
                 collectionsGrid.Children.Add(tile);
             }
 
+            timer = new DispatcherTimer();
+            timer.Tick += timer_Tick;
+            timer.Interval = new TimeSpan(0, 0, 0, 10);
+            timer.Start();
+
             UpdateSources();
+        }
+
+        ~CollectionsView()
+        {
+            timer.Stop();
+        }
+
+        void timer_Tick(object sender, object e)
+        {
+            System.Diagnostics.Debug.WriteLine("Updating tiles when needed...");
+
+            foreach (var tile in tiles)
+            {
+                tile.UpdateIfChanged();
+            }
         }
 
         public async void UpdateSources()
@@ -61,8 +85,7 @@ namespace CollectorRT
 
                 if (updateSource != Source.UpToDate)
                 {
-                    tile.UpdateEntry();
-                    tile.UpdateDisplayedContent();
+                    tile.UpdateIfChanged();
                 }
 
                 x--;
