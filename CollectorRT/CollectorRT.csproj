@@ -131,6 +131,7 @@
     </Compile>
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
+    <Compile Include="UI\EntryItem.cs" />
     <Compile Include="UI\SourceTile.cs" />
   </ItemGroup>
   <ItemGroup>

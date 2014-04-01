@@ -8,6 +8,11 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -17,8 +22,8 @@
             <TextBlock FontFamily="/Assets/ProximaNova-R#Proxima Nova" Foreground="White" FontSize="15" Text="45" x:Name="toUpdateSources" Canvas.ZIndex="3" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" />
         </Grid>
         <Image Margin="17,20,0,-10" Source="Assets/Logo-big.png" HorizontalAlignment="Left" VerticalAlignment="top"/>
-        <ScrollViewer Grid.Row="1" HorizontalScrollMode="Disabled" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <VariableSizedWrapGrid Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" ItemWidth="250" ItemHeight="250" x:Name="collectionsGrid" Margin="30"></VariableSizedWrapGrid>
+        <ScrollViewer Grid.Row="1" VerticalAlignment="Stretch" VerticalContentAlignment="Center" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto">
+            <VariableSizedWrapGrid ItemWidth="250" ItemHeight="250" x:Name="collectionsGrid" Margin="30"></VariableSizedWrapGrid>
         </ScrollViewer>
     </Grid>
 </Page>

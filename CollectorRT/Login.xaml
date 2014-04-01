@@ -8,6 +8,11 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="0">
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
         <StackPanel Width="250" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Image Source="Assets/Logo-big.png" />
             <TextBlock FontSize="15" Margin="0,0,0,20" x:Name="txtDescription" TextWrapping="Wrap" Text="Please log in using your Collector for Windows Phone account." HorizontalAlignment="Stretch" TextAlignment="Center"></TextBlock>

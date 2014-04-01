@@ -44,7 +44,11 @@
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
             <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
+                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>            
         </Grid>
+
+        <ScrollViewer x:Name="sv" ViewChanged="OnScrollViewerViewChanged" Grid.Row="1" VerticalAlignment="Stretch" VerticalContentAlignment="Center" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto">
+            <VariableSizedWrapGrid ItemWidth="250" ItemHeight="500" x:Name="itemsGrid" Margin="30"></VariableSizedWrapGrid>
+        </ScrollViewer>
     </Grid>
 </Page>

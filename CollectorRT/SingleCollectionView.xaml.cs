@@ -1,5 +1,7 @@
 ﻿using CollectorRT.Common;
+using CollectorRT.Data;
 using CollectorRT.Data.Tables;
+using CollectorRT.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,6 +27,9 @@ namespace CollectorRT
     public sealed partial class SingleCollectionView : Page
     {
         private Source _source;
+        private List<EntryItem> entries;
+
+        private static int EntriesPageLimit = 20;
 
         private NavigationHelper navigationHelper;
 
@@ -37,13 +42,41 @@ namespace CollectorRT
             get { return this.navigationHelper; }
         }
 
-
         public SingleCollectionView()
         {
             this.InitializeComponent();
+
+            this.entries = new List<EntryItem>();
+
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+        }
+
+        public void AppendElements()
+        {
+            var _newEntries = DB.Current.entries.Where(e => e.Source == _source.ID).OrderByDescending(e => e.DatePublish).Skip(entries.Count).Take(EntriesPageLimit).ToList();
+
+            foreach (var entry in _newEntries)
+            {
+                var item = new EntryItem(entry);
+                entries.Add(item);
+
+                this.itemsGrid.Children.Add(item);
+            }
+        }
+
+        private void OnScrollViewerViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            var verticalOffset = sv.HorizontalOffset;
+            var maxVerticalOffset = sv.ExtentWidth - sv.ViewportWidth;
+
+            if (maxVerticalOffset < 0 ||
+                verticalOffset == maxVerticalOffset)
+            {
+                // Scrolled to the far right
+                this.AppendElements();
+            }
         }
 
         /// <summary>
@@ -90,6 +123,8 @@ namespace CollectorRT
 
             _source = e.Parameter as Source;
             this.pageTitle.Text = _source.Title;
+
+            this.AppendElements();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
