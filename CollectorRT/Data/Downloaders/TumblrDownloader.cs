@@ -22,7 +22,7 @@ namespace CollectorRT.Data.Downloaders
 
                 string url = String.Format("http://api.tumblr.com/v2/blog/{0}.tumblr.com/posts?api_key={1}&limit=20", source.Url, ConsumerKey);
                 var data = await DownloadContentFromUrl(url);
-                var posts = JObject.Parse("{\"data\": " + data + "}")["data"]["posts"].ToList();
+                var posts = JObject.Parse("{\"data\": " + data + "}")["data"]["response"]["posts"].ToList();
 
                 newArticles += AddEntries(posts, source);
             }
@@ -46,7 +46,7 @@ namespace CollectorRT.Data.Downloaders
 
                 if (exist)
                 {
-                    System.Diagnostics.Debug.WriteLine("Skipping entry " + itemId);
+                    System.Diagnostics.Debug.WriteLine("Skipping tumblr entry " + itemId);
                     continue;
                 }
 

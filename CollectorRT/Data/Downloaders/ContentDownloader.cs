@@ -13,6 +13,8 @@ namespace CollectorRT.Data.Downloaders
     {
         private bool _IsBusy = false;
 
+        private static int DownloadsPerThread = 10;
+
         public static ContentDownloader Current
         {
             get
@@ -40,14 +42,16 @@ namespace CollectorRT.Data.Downloaders
         private async void _Run()
         {
             if (IsBusy) return;
-            System.Diagnostics.Debug.WriteLine("Running the worker...");
 
-            var toDownload = DB.Current.entries.Where(e => e.ThumbnailHasBeenDownloaded == false).OrderByDescending(e => e.DateInsert).Take(5).ToList();
-            if (toDownload.Count == 0) return;
+            var toDownload = DB.Current.entries.Where(e => e.ThumbnailHasBeenDownloaded == false).OrderByDescending(e => e.DateInsert).Take(DownloadsPerThread).ToList();
+            if (toDownload.Count == 0) {
+                System.Diagnostics.Debug.WriteLine("The worker has nothing to do");
+                return;
+            }
+
+            System.Diagnostics.Debug.WriteLine("Running the worker for " + toDownload.Count + " entries.");
 
             _IsBusy = true;
-
-            System.Diagnostics.Debug.WriteLine("To download: " + toDownload.Count);
 
             foreach (var entry in toDownload)
             {

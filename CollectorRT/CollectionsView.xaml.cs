@@ -51,7 +51,7 @@ namespace CollectorRT
 
             timer = new DispatcherTimer();
             timer.Tick += timer_Tick;
-            timer.Interval = new TimeSpan(0, 0, 0, 10);
+            timer.Interval = new TimeSpan(0, 0, 0, 13);
             timer.Start();
 
             UpdateSources();

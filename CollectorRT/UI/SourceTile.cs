@@ -90,20 +90,18 @@ namespace CollectorRT.UI
 
             bg.SetValue(Canvas.ZIndexProperty, 1);
 
-            if (entry != null)
+            content = new TextBlock
             {
-                content = new TextBlock
-                {
-                    FontSize = 21,
-                    LineHeight = 25,
-                    FontFamily = new FontFamily("/Assets/ProximaNova-R.ttf#Proxima Nova"),
-                    TextWrapping = Windows.UI.Xaml.TextWrapping.Wrap,
-                    Foreground = new SolidColorBrush(Colors.White),
-                    Margin = new Thickness(20, 15, 20, -5)
-                };
+                FontSize = 21,
+                LineHeight = 25,
+                FontFamily = new FontFamily("/Assets/ProximaNova-R.ttf#Proxima Nova"),
+                TextWrapping = Windows.UI.Xaml.TextWrapping.Wrap,
+                Foreground = new SolidColorBrush(Colors.White),
+                Margin = new Thickness(20, 15, 20, -5),
+                Visibility = Visibility.Collapsed
+            };
 
-                bg.Children.Add(content);
-            }
+            bg.Children.Add(content);
 
             title = new TextBlock
             {
@@ -131,6 +129,7 @@ namespace CollectorRT.UI
 
             if (entry != null)
             {
+                content.Visibility = Visibility.Visible;
                 content.Text = entry.Title.Length > descriptionLength ? entry.Title.Substring(0, descriptionLength-1) + "..." : entry.Title;
 
                 if (entry.ThumbnailURL != null)
@@ -152,6 +151,7 @@ namespace CollectorRT.UI
             }
             else
             {
+                content.Visibility = Visibility.Collapsed;
                 Background = new SolidColorBrush(Color.FromArgb(255, 188, 45, 48));
             }
         }
