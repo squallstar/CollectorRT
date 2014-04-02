@@ -149,6 +149,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Content Include="Assets\ProximaNovaCondensed.ttf" />
     <None Include="CollectorRT_TemporaryKey.pfx" />
     <None Include="packages.config" />
   </ItemGroup>

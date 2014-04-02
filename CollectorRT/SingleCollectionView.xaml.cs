@@ -48,6 +48,9 @@ namespace CollectorRT
 
             this.entries = new List<EntryItem>();
 
+            this.itemsGrid.ItemHeight = 630;
+            this.itemsGrid.ItemWidth = 420.0;
+
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;

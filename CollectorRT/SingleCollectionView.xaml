@@ -28,28 +28,29 @@
         </Grid.ChildrenTransitions>
         
         <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
+            <RowDefinition Height="85"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Back button and page title -->
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+            <Button x:Name="backButton" Margin="0,0,0,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
-                        VerticalAlignment="Top"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
                         AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>            
+            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" FontSize="50" FontFamily="/Assets/ProximaNova-B.ttf#Proxima Nova" Grid.Column="1" 
+                        IsHitTestVisible="false" TextWrapping="NoWrap" Margin="0,0,30,0" VerticalAlignment="Center"/>            
         </Grid>
 
         <ScrollViewer x:Name="sv" ViewChanged="OnScrollViewerViewChanged" Grid.Row="1" VerticalAlignment="Stretch" VerticalContentAlignment="Center" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto">
-            <VariableSizedWrapGrid ItemWidth="250" ItemHeight="500" x:Name="itemsGrid" Margin="30"></VariableSizedWrapGrid>
+            <VariableSizedWrapGrid x:Name="itemsGrid" Margin="30"></VariableSizedWrapGrid>
         </ScrollViewer>
     </Grid>
 </Page>

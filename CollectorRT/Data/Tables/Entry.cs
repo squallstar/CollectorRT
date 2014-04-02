@@ -36,5 +36,18 @@ namespace CollectorRT.Data.Tables
 
         public string SourceTitle { get; set; }
         public string SourceURL { get; set; }
+
+        public string AuthorDisplayString
+        {
+            get
+            {
+                string ret = "No source name";
+
+                if (Author != null) ret = Author;
+                else if (SourceTitle != null) ret = SourceTitle;
+
+                return ret;
+            }
+        }
     }
 }

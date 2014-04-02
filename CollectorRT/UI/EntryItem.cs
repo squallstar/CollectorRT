@@ -8,6 +8,7 @@ using CollectorRT.Data.Tables;
 using Windows.UI.Xaml.Media;
 using Windows.UI;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace CollectorRT.UI
 {
@@ -21,6 +22,7 @@ namespace CollectorRT.UI
         private TextBlock _title;
         private TextBlock _author;
         private TextBlock _datepost;
+        private TextBlock _content;
         private Image _img;
 
         public EntryItem (Entry entry)
@@ -33,20 +35,92 @@ namespace CollectorRT.UI
         public void Build()
         {
             Background = new SolidColorBrush(Colors.White);
-            Margin = new Thickness(0, 0, 20, 20);
+            Margin = new Thickness(0, 0, 10, 10);
+
+            VerticalAlignment = VerticalAlignment.Stretch;
+
+            this._BuildTallVertical();
+        }
+
+        private void _BuildTallVertical()
+        {
+            // 1. Title
+
+            //this.RowDefinitions.Add(new RowDefinition
+            //{
+            //    MaxHeight = 300
+            //});
+
+            if (_entry.ThumbnailURL != null)
+            {
+                _img = new Image();
+                _img.Margin = new Thickness(0, 0, 0, 0);
+                _img.VerticalAlignment = VerticalAlignment.Top;
+                _img.HorizontalAlignment = HorizontalAlignment.Left;
+                _img.Stretch = Stretch.UniformToFill;
+                _img.MaxHeight = 250;
+
+                try
+                {
+                    //This cause the app to crash if the url is not well formed
+                    _img.Source = new BitmapImage(new Uri(_entry.ThumbnailURL, UriKind.Absolute));
+
+                    this.Children.Add(_img);
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                    _img = null;
+                }
+            }
 
             _title = new TextBlock
             {
-                FontSize = 24,
-                LineHeight = 30,
-                FontFamily = new FontFamily("/Assets/ProximaNova-R.ttf#Proxima Nova"),
+                FontSize = 37,
+                LineHeight = 45,
+                FontFamily = new FontFamily("/Assets/ProximaNovaCondensed.ttf#ProximaNovaCondensed"),
                 Text = _entry.Title,
-                Margin = new Thickness(30,30,30,30),
+                Margin = new Thickness(20, 20, 20, 15),
                 TextWrapping = Windows.UI.Xaml.TextWrapping.Wrap,
-                Foreground = new SolidColorBrush(Colors.Black)
+                Foreground = new SolidColorBrush(Colors.Black),
+                VerticalAlignment = VerticalAlignment.Top
             };
 
             this.Children.Add(_title);
+
+
+            // 2. Author - Source
+
+            _author = new TextBlock
+            {
+                FontSize = 20,
+                LineHeight = 25,
+                FontFamily = new FontFamily("/Assets/ProximaNova-R.ttf#Proxima Nova"),
+                Text = _entry.AuthorDisplayString,
+                Margin = new Thickness(20, 0, 20, 20),
+                TextWrapping = Windows.UI.Xaml.TextWrapping.Wrap,
+                Foreground = new SolidColorBrush(Color.FromArgb(255,190,43,43)),
+                VerticalAlignment = VerticalAlignment.Top
+            };
+
+            //3. Description
+
+            if (_entry.ContentText != null)
+            {
+                _content = new TextBlock
+                {
+                    FontSize = 20,
+                    LineHeight = 25,
+                    FontFamily = new FontFamily("/Assets/ProximaNova-R.ttf#Proxima Nova"),
+                    Text = _entry.ContentText,
+                    Margin = new Thickness(20, 0, 20, 20),
+                    TextWrapping = Windows.UI.Xaml.TextWrapping.Wrap,
+                    Foreground = new SolidColorBrush(Color.FromArgb(255, 110, 110, 110)),
+                    VerticalAlignment = VerticalAlignment.Top
+                };
+
+                this.Children.Add(_content);
+            }
         }
     }
 }
