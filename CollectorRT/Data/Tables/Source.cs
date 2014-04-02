@@ -68,11 +68,11 @@ namespace CollectorRT.Data.Tables
 
         public Entry FirstEntryWithImage()
         {
-            var entry = DB.Current.entries.Where(e => e.Source == this.ID && e.ThumbnailURL != null).OrderByDescending(e => e.DateInsert).FirstOrDefault();
+            var entry = DB.Current.entries.Where(e => e.Source == this.ID && e.ThumbnailURL != null).OrderByDescending(e => e.DatePublish).FirstOrDefault();
 
             if (entry == null)
             {
-                return DB.Current.entries.Where(e => e.Source == this.ID).OrderByDescending(e => e.DateInsert).FirstOrDefault();
+                return DB.Current.entries.Where(e => e.Source == this.ID).OrderByDescending(e => e.DatePublish).FirstOrDefault();
             }
 
             return entry;
