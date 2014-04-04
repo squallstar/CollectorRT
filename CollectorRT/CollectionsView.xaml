@@ -21,14 +21,18 @@
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80"></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Canvas.ZIndex="1" Width="50" Height="50" Margin="0,50,50,0" HorizontalAlignment="Right" VerticalAlignment="Top">
-            <ProgressRing Canvas.ZIndex="2" x:Name="loader" Foreground="#BC2D30" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsActive="True"></ProgressRing>
-            <TextBlock FontFamily="/Assets/ProximaNova-R#Proxima Nova" Foreground="White" FontSize="15" Text="45" x:Name="toUpdateSources" Canvas.ZIndex="3" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <Grid Background="#be2b2b">
+            <Image Margin="16,0,0,0" Source="Assets/Logo-big.png" HorizontalAlignment="Left" VerticalAlignment="top"/>
+
+            <Grid Canvas.ZIndex="1" Width="50" Height="50" Margin="0,0,30,0" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <ProgressRing Canvas.ZIndex="2" x:Name="loader" Foreground="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsActive="True"></ProgressRing>
+                <TextBlock FontFamily="/Assets/ProximaNova-R#Proxima Nova" Foreground="White" FontSize="15" Text="45" x:Name="toUpdateSources" Canvas.ZIndex="3" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            </Grid>
         </Grid>
-        <Image Margin="17,20,0,-10" Source="Assets/Logo-big.png" HorizontalAlignment="Left" VerticalAlignment="top"/>
+        
         <ScrollViewer x:Name="sv" Grid.Row="1" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto">
             <VariableSizedWrapGrid ItemWidth="200" ItemHeight="200" x:Name="collectionsGrid" Margin="30"></VariableSizedWrapGrid>
         </ScrollViewer>
