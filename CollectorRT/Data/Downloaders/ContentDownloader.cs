@@ -6,12 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
+using System.Threading;
 
 namespace CollectorRT.Data.Downloaders
 {
     public class ContentDownloader : Downloader
     {
         private bool _IsBusy = false;
+
+        private CancellationTokenSource _sourceToken;
 
         private static int DownloadsPerThread = 10;
 
@@ -31,24 +34,43 @@ namespace CollectorRT.Data.Downloaders
             }
         }
 
+        /// <summary>
+        /// Stops the worker
+        /// </summary>
         public void Stop()
         {
-            //http://stackoverflow.com/questions/10134310/how-to-cancel-a-task-in-await
+            if (_sourceToken != null)
+            {
+                _sourceToken.Cancel();
+                _sourceToken = null;
+                _IsBusy = false;
+            }
         }
 
         /// <summary>
         /// Runs the worker on the background thread
         /// </summary>
-        public async void Run()
+        public async void Run(Source source = null)
         {
-            await Task.Run(() => _Run());
+            Stop();
+
+            _sourceToken = new CancellationTokenSource();
+
+            await Task.Run(() => _Run(source, _sourceToken.Token), _sourceToken.Token);
         }
 
-        private async void _Run()
+        private async void _Run(Source source, CancellationToken cancellationToken)
         {
             if (IsBusy) return;
 
-            var toDownload = DB.Current.entries.Where(e => e.ThumbnailHasBeenDownloaded == false).OrderByDescending(e => e.DateInsert).Take(DownloadsPerThread).ToList();
+            var tmp = DB.Current.entries.Where(e => e.ThumbnailHasBeenDownloaded == false);
+
+            if (source != null)
+            {
+                tmp = tmp.Where(s => s.Source == source.ID);
+            }
+
+            var toDownload = tmp.OrderByDescending(e => e.DateInsert).Take(DownloadsPerThread).ToList();
             if (toDownload.Count == 0) {
                 System.Diagnostics.Debug.WriteLine("The worker has nothing to do");
                 return;
@@ -61,10 +83,20 @@ namespace CollectorRT.Data.Downloaders
             foreach (var entry in toDownload)
             {
                 await GetContentForEntry(entry);
+
+                try
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                }
+                catch (Exception)
+                {
+                    DB.Current.connection.UpdateAll(toDownload);
+                    _IsBusy = false;
+                    return;
+                }
             }
 
             DB.Current.connection.UpdateAll(toDownload);
-
             _IsBusy = false;
 
             Run();

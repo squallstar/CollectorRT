@@ -103,8 +103,6 @@ namespace CollectorRT
             this.btnRefresh.IsEnabled = true;
             this.btnRefresh.Label = "Sync/Refresh";
             loader.IsActive = false;
-
-            ContentDownloader.Current.Run();
         }
 
         void tile_Tapped(object sender, TappedRoutedEventArgs e)
@@ -116,6 +114,8 @@ namespace CollectorRT
         {
             //navigationHelper.OnNavigatedTo(e);
             timer.Start();
+
+            ContentDownloader.Current.Run();
 
             OnWindowSizeChanged(null, null);
         }

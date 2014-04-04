@@ -1,5 +1,6 @@
 ﻿using CollectorRT.Common;
 using CollectorRT.Data;
+using CollectorRT.Data.Downloaders;
 using CollectorRT.Data.Tables;
 using CollectorRT.UI;
 using System;
@@ -109,8 +110,6 @@ namespace CollectorRT
         {
         }
 
-        #region Registrazione di NavigationHelper
-
         /// I metodi forniti in questa sezione vengono utilizzati per consentire a
         /// NavigationHelper di rispondere ai metodi di navigazione della pagina.
         /// 
@@ -127,6 +126,9 @@ namespace CollectorRT
             _source = e.Parameter as Source;
             this.pageTitle.Text = _source.Title;
 
+            ContentDownloader.Current.Stop();
+            ContentDownloader.Current.Run(this._source);
+
             this.AppendElements();
         }
 
@@ -134,7 +136,5 @@ namespace CollectorRT
         {
             navigationHelper.OnNavigatedFrom(e);
         }
-
-        #endregion
     }
 }
