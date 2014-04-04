@@ -29,7 +29,7 @@
             <TextBlock FontFamily="/Assets/ProximaNova-R#Proxima Nova" Foreground="White" FontSize="15" Text="45" x:Name="toUpdateSources" Canvas.ZIndex="3" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" />
         </Grid>
         <Image Margin="17,20,0,-10" Source="Assets/Logo-big.png" HorizontalAlignment="Left" VerticalAlignment="top"/>
-        <ScrollViewer x:Name="sv" Grid.Row="1" VerticalAlignment="Stretch" VerticalContentAlignment="Center" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto">
+        <ScrollViewer x:Name="sv" Grid.Row="1" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto">
             <VariableSizedWrapGrid ItemWidth="200" ItemHeight="200" x:Name="collectionsGrid" Margin="30"></VariableSizedWrapGrid>
         </ScrollViewer>
     </Grid>
