@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
+using CollectorRT.Data;
 
 namespace CollectorRT.UI
 {
@@ -39,7 +40,25 @@ namespace CollectorRT.UI
 
             VerticalAlignment = VerticalAlignment.Stretch;
 
+            foreach (UIElement el in this.Children.ToList())
+            {
+                this.Children.Remove(el);
+            }
+
             this._BuildTallVertical();
+        }
+
+        public void UpdateIfChanged()
+        {
+            var newEntry = DB.Current.entries.Where(e => e.ID == _entry.ID).FirstOrDefault();
+
+            if (_entry.ThumbnailURL != newEntry.ThumbnailURL || _entry.Summary != newEntry.Summary || _entry.Link != newEntry.Link)
+            {
+                // The object on the DB was updated
+                _entry = newEntry;
+
+                Build();
+            }
         }
 
         private void _BuildTallVertical()

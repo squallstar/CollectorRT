@@ -34,6 +34,8 @@ namespace CollectorRT
 
         private NavigationHelper navigationHelper;
 
+        private DispatcherTimer timer;
+
         /// <summary>
         /// NavigationHelper viene utilizzato in oggi pagina per favorire la navigazione e 
         /// la gestione del ciclo di vita dei processi
@@ -52,9 +54,21 @@ namespace CollectorRT
             this.itemsGrid.ItemHeight = 630;
             this.itemsGrid.ItemWidth = 420.0;
 
+            timer = new DispatcherTimer();
+            timer.Tick += timer_Tick;
+            timer.Interval = new TimeSpan(0, 0, 0, 13);
+
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+        }
+
+        void timer_Tick(object sender, object e)
+        {
+            foreach (var entry in entries)
+            {
+                entry.UpdateIfChanged();
+            }
         }
 
         public void AppendElements()
@@ -130,11 +144,14 @@ namespace CollectorRT
             ContentDownloader.Current.Run(this._source);
 
             this.AppendElements();
+
+            this.timer.Start();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedFrom(e);
+            this.timer.Stop();
         }
     }
 }

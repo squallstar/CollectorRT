@@ -64,8 +64,6 @@ namespace CollectorRT
 
         void timer_Tick(object sender, object e)
         {
-            System.Diagnostics.Debug.WriteLine("Updating tiles when needed...");
-
             foreach (var tile in tiles)
             {
                 tile.UpdateIfChanged();

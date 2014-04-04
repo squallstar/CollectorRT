@@ -99,7 +99,7 @@ namespace CollectorRT.Data.Downloaders
             DB.Current.connection.UpdateAll(toDownload);
             _IsBusy = false;
 
-            Run();
+            Run(source);
         }
 
         public async Task<bool> GetContentForEntry(Entry entry)
