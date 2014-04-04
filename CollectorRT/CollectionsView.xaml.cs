@@ -153,7 +153,7 @@ namespace CollectorRT
                 sv.HorizontalScrollMode = ScrollMode.Enabled;
                 sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
 
-                double squareSize = height / 5;
+                double squareSize = height / 4;
 
                 this.collectionsGrid.ItemHeight = squareSize;
                 this.collectionsGrid.ItemWidth = squareSize;
