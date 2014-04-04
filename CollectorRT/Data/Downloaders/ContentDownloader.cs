@@ -71,9 +71,19 @@ namespace CollectorRT.Data.Downloaders
             }
 
             var toDownload = tmp.OrderByDescending(e => e.DateInsert).Take(DownloadsPerThread).ToList();
-            if (toDownload.Count == 0) {
-                System.Diagnostics.Debug.WriteLine("The worker has nothing to do");
-                return;
+            if (toDownload.Count == 0)
+            {
+                if (source != null)
+                {
+                    System.Diagnostics.Debug.WriteLine("The worker downloaded all the contents for the given source.");
+                    Run();
+                    return;
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("The worker has nothing to do");
+                    return;
+                }
             }
 
             System.Diagnostics.Debug.WriteLine("Running the worker for " + toDownload.Count + " entries.");
