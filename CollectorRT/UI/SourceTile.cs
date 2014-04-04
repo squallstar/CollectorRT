@@ -1,4 +1,5 @@
-﻿using CollectorRT.Data.Tables;
+﻿using CollectorRT.Data;
+using CollectorRT.Data.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -116,8 +117,6 @@ namespace CollectorRT.UI
             Children.Add(bg);
 
             backgroundImage = new Image();
-            backgroundImage.Stretch = Stretch.UniformToFill;
-            backgroundImage.Opacity = 0.85;
             this.Children.Add(this.backgroundImage);
 
             UpdateDisplayedContent();
@@ -138,22 +137,34 @@ namespace CollectorRT.UI
                     {
                         Background = new SolidColorBrush(Colors.White);
                         this.backgroundImage.Source = new BitmapImage(new Uri(entry.ThumbnailURL));
+                        backgroundImage.Stretch = Stretch.UniformToFill;
+                        backgroundImage.Opacity = 0.85;
                     }
                     catch (Exception)
                     {
-                        Background = new SolidColorBrush(Color.FromArgb(255, 188, 45, 48));
+                        this._SetDefaultImage();
                     }
                 }
                 else
                 {
-                    Background = new SolidColorBrush(Color.FromArgb(255, 188, 45, 48));
+                    this._SetDefaultImage();
                 }
             }
             else
             {
                 content.Visibility = Visibility.Collapsed;
-                Background = new SolidColorBrush(Color.FromArgb(255, 188, 45, 48));
+                this._SetDefaultImage();
             }
+        }
+
+        private void _SetDefaultImage()
+        {
+            var uri = Tiles.ImageForSource(source);
+            this.backgroundImage.Source = new BitmapImage(uri);
+            backgroundImage.Stretch = Stretch.Uniform;
+            backgroundImage.Opacity = 1;
+
+            Background = new SolidColorBrush(Tiles.ColorForSource(source));
         }
     }
 }

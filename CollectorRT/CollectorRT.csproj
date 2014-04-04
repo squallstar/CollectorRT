@@ -122,6 +122,7 @@
     <Compile Include="Data\External\Md5.cs" />
     <Compile Include="Data\Tables\Entry.cs" />
     <Compile Include="Data\Tables\Source.cs" />
+    <Compile Include="Data\Tiles.cs" />
     <Compile Include="Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
@@ -139,6 +140,27 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <Content Include="Assets\BadgeLogo.scale-100.png" />
+    <Content Include="Assets\Categories\Background-ArtDesign.png" />
+    <Content Include="Assets\Categories\Background-Article.png" />
+    <Content Include="Assets\Categories\Background-Business.png" />
+    <Content Include="Assets\Categories\Background-Cars.png" />
+    <Content Include="Assets\Categories\Background-DecorArchitecture.png" />
+    <Content Include="Assets\Categories\Background-Entertainment.png" />
+    <Content Include="Assets\Categories\Background-Fashion.png" />
+    <Content Include="Assets\Categories\Background-Food.png" />
+    <Content Include="Assets\Categories\Background-Health.Beauty.png" />
+    <Content Include="Assets\Categories\Background-LifeStyle.png" />
+    <Content Include="Assets\Categories\Background-ManStyle.png" />
+    <Content Include="Assets\Categories\Background-Music.png" />
+    <Content Include="Assets\Categories\Background-PhotoeVideo.png" />
+    <Content Include="Assets\Categories\Background-Scie.Tech.png" />
+    <Content Include="Assets\Categories\Background-Sport.png" />
+    <Content Include="Assets\Categories\Background-Travel.png" />
+    <Content Include="Assets\Categories\Background-Videogame.png" />
+    <Content Include="Assets\Categories\Background-Web.Graphic.png" />
+    <Content Include="Assets\Categories\Background-WorldNews.png" />
+    <Content Include="Assets\Categories\Background-Twitter.png" />
+    <Content Include="Assets\Categories\Background-Tumblr.png" />
     <Content Include="Assets\ProximaNova-B.ttf" />
     <Content Include="Assets\ProximaNova-R.ttf" />
     <Content Include="Assets\Square310x310Logo.scale-100.png" />

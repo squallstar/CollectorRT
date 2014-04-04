@@ -41,6 +41,8 @@ namespace CollectorRT
 
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
+            this.SizeChanged += OnWindowSizeChanged;
+
             tiles = new List<SourceTile>();
             sources = DB.Current.sources.OrderByDescending(s => s.DateUpdate).ToList();
 
@@ -114,12 +116,61 @@ namespace CollectorRT
         {
             //navigationHelper.OnNavigatedTo(e);
             timer.Start();
+
+            OnWindowSizeChanged(null, null);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             //navigationHelper.OnNavigatedFrom(e);
             timer.Stop();
+        }
+
+        private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //var CurrentViewState = Windows.UI.ViewManagement.ApplicationView.Value;
+            //double AppWidth = e.Size.Width;
+            //double AppHeight = e.Size.Height;
+
+            System.Diagnostics.Debug.WriteLine("Window size changed");
+
+            UpdateItemsSize();
+        }
+
+        private void UpdateItemsSize()
+        {
+            var bounds = Window.Current.Bounds;
+            double height = bounds.Height;
+            double width = bounds.Width;
+
+            if (width > 600)
+            {
+                // Horizontal mode
+
+                sv.VerticalScrollMode = ScrollMode.Disabled;
+                sv.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+
+                sv.HorizontalScrollMode = ScrollMode.Enabled;
+                sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+
+                double squareSize = height / 5;
+
+                this.collectionsGrid.ItemHeight = squareSize;
+                this.collectionsGrid.ItemWidth = squareSize;
+            }
+            else
+            {
+                // Vertical mode
+
+                sv.VerticalScrollMode = ScrollMode.Enabled;
+                sv.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+
+                sv.HorizontalScrollMode = ScrollMode.Disabled;
+                sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+
+                this.collectionsGrid.ItemHeight = 200.0;
+                this.collectionsGrid.ItemWidth = Double.NaN;
+            }
         }
 
         private async void SyncRefresh_Click(object sender, RoutedEventArgs e)
