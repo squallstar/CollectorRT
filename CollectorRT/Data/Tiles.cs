@@ -140,11 +140,11 @@ namespace CollectorRT.Data
                         break;
                 }
             }
-            else if (source.Kind == "twitter" || source.Kind == "twitter-user")
+            else if (source.IsTwitterKind)
             {
                 tile = "Background-Twitter.png";
             }
-            else if (source.Kind == "tumblr")
+            else if (source.IsTumblrKind)
             {
                 tile = "Background-Tumblr.png";
             }
@@ -154,11 +154,11 @@ namespace CollectorRT.Data
 
         public static Color ColorForSource(Source source)
         {
-            if (source.Kind == "twitter" || source.Kind == "twitter-user")
+            if (source.IsTwitterKind)
             {
                 return Color.FromArgb(255, 0, 172, 237);
             }
-            else if (source.Kind == "tumblr")
+            else if (source.IsTumblrKind)
             {
                 return Color.FromArgb(255, 52, 80, 107);
             }

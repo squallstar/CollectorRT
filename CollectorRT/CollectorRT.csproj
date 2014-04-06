@@ -119,6 +119,7 @@
     <Compile Include="Data\Downloaders\Downloader.cs" />
     <Compile Include="Data\Downloaders\RSSDownloader.cs" />
     <Compile Include="Data\Downloaders\TumblrDownloader.cs" />
+    <Compile Include="Data\Downloaders\TwitterDownloader.cs" />
     <Compile Include="Data\External\Md5.cs" />
     <Compile Include="Data\Tables\Entry.cs" />
     <Compile Include="Data\Tables\Source.cs" />
@@ -197,6 +198,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="AsyncOAuth">
+      <HintPath>..\libs\AsyncOAuth.dll</HintPath>
+    </Reference>
     <Reference Include="Fizzler, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libs\Fizzler\Fizzler.dll</HintPath>

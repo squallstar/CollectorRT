@@ -1,4 +1,5 @@
-﻿using CollectorRT.Data.Tables;
+﻿using AsyncOAuth;
+using CollectorRT.Data.Tables;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -66,6 +67,14 @@ namespace CollectorRT.Data
             set
             {
                 settings.Values[AccountLastSync] = value;
+            }
+        }
+
+        public AccessToken TwitterAccessToken
+        {
+            get
+            {
+                return new AccessToken(settings.Values["Twitter.Token.Key"].ToString(), settings.Values["Twitter.Token.Secret"].ToString());
             }
         }
 

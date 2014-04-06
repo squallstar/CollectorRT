@@ -44,6 +44,22 @@ namespace CollectorRT.Data.Tables
             }
         }
 
+        public bool IsTumblrKind
+        {
+            get
+            {
+                return Kind == "tumblr";
+            }
+        }
+
+        public bool IsTwitterKind
+        {
+            get
+            {
+                return Kind == "twitter" || Kind == "twitter-user";
+            }
+        }
+
         public async Task<int> update(bool force = false)
         {
             if (!force && DateUpdate.Ticks >= DateTime.Now.AddMinutes(-OutDatedAfterMinutes).Ticks)
@@ -57,7 +73,8 @@ namespace CollectorRT.Data.Tables
             int newArticles = 0;
 
             if (Kind == "rss") newArticles = await RSSDownloader.UpdateSource(this);
-            else if (Kind == "tumblr") newArticles = await TumblrDownloader.UpdateSource(this);
+            else if (IsTumblrKind) newArticles = await TumblrDownloader.UpdateSource(this);
+            else if (IsTwitterKind) newArticles = await TwitterDownloader.UpdateSource(this);
 
             UnreadEntries += newArticles;
             DateUpdate = DateTime.Now;

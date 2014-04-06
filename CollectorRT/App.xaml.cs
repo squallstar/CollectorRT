@@ -67,6 +67,21 @@ namespace CollectorRT
                 contentDownloader = new ContentDownloader();
                 contentDownloader.Run();
 
+                // Windows Store Apps
+                AsyncOAuth.OAuthUtility.ComputeHash = (key, buffer) =>
+                {
+                    var crypt = Windows.Security.Cryptography.Core.MacAlgorithmProvider.OpenAlgorithm("HMAC_SHA1");
+                    var keyBuffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(key);
+                    var cryptKey = crypt.CreateKey(keyBuffer);
+
+                    var dataBuffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(buffer);
+                    var signBuffer = Windows.Security.Cryptography.Core.CryptographicEngine.Sign(cryptKey, dataBuffer);
+
+                    byte[] value;
+                    Windows.Security.Cryptography.CryptographicBuffer.CopyToByteArray(signBuffer, out value);
+                    return value;
+                };
+
 
                 // Creare un frame che agisca da contesto di navigazione e passare alla prima pagina
                 rootFrame = new Frame();

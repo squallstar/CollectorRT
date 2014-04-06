@@ -92,7 +92,11 @@ namespace CollectorRT.Data.Downloaders
 
             foreach (var entry in toDownload)
             {
-                await GetContentForEntry(entry);
+                try
+                {
+                    await GetContentForEntry(entry);
+                }
+                catch (Exception) { }
 
                 try
                 {
