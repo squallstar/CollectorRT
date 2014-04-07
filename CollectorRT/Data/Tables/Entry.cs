@@ -28,6 +28,9 @@ namespace CollectorRT.Data.Tables
         public string AuthorUsername { get; set; }
         public string AuthorThumbnail { get; set; }
 
+        public bool IsLiked { get; set; }
+        public int LikesCount { get; set; }
+
         [SQLite.Indexed(Name = "IndexSource")]
         public int Source { get; set; }
 

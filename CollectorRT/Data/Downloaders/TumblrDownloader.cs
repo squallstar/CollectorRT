@@ -83,7 +83,7 @@ namespace CollectorRT.Data.Downloaders
 
                 if (DB.Current.connection.Insert(entry) > 0)
                 {
-                    System.Diagnostics.Debug.WriteLine("Tumblr post inserted " + entry.ID);
+                    System.Diagnostics.Debug.WriteLine("Tumblr post saved " + entry.ID);
                     i++;
                 }
             }

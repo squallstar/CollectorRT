@@ -91,6 +91,19 @@ namespace CollectorRT.Data
             }
         }
 
+        public string InstagramAccessToken
+        {
+            get
+            {
+                if (settings.Values.ContainsKey("Settings.Instagram.AccessToken"))
+                {
+                    return settings.Values["Settings.Instagram.AccessToken"].ToString();
+                }
+
+                return "";
+            }
+        }
+
         public void Logout()
         {
             settings.Values.Remove(AccountLogged);

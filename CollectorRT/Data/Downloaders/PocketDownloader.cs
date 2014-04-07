@@ -111,7 +111,7 @@ namespace CollectorRT.Data.Downloaders
 
                     if (DB.Current.connection.Insert(entry) > 0)
                     {
-                        System.Diagnostics.Debug.WriteLine("Pocket item inserted " + entry.ID);
+                        System.Diagnostics.Debug.WriteLine("Pocket item saved " + entry.ID);
                         i++;
                     }
                 }

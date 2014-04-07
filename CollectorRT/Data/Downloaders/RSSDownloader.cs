@@ -190,7 +190,7 @@ namespace CollectorRT.Data.Downloaders
                     if (DB.Current.connection.Insert(entry) > 0)
                     {
                         i++;
-                        System.Diagnostics.Debug.WriteLine("RSS Article inserted " + entry.ID);
+                        System.Diagnostics.Debug.WriteLine("RSS Article saved " + entry.ID);
                     }
 
                     
