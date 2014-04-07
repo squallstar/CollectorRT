@@ -141,7 +141,10 @@ namespace CollectorRT.Data.Downloaders
 
                             if (title != null)
                             {
-                                entry.Title = title.InnerText;
+                                if (entry.Title == null || title.InnerText.Length > 40)
+                                {
+                                    entry.Title = title.InnerText;
+                                }
                             }
                         }
                            
