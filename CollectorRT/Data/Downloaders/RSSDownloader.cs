@@ -117,7 +117,7 @@ namespace CollectorRT.Data.Downloaders
                         Kind = "rss",
                         Title = title,
                         Link = link,
-                        ThumbnailHasBeenDownloaded = false,
+                        Fetched = false,
                         DateInsert = DateTime.Now,
                         SourceURL = sourceUrl
                     };
@@ -182,12 +182,15 @@ namespace CollectorRT.Data.Downloaders
                         if (person.Email != null) entry.AuthorUsername = person.Email;
                     }
 
-                    if (entry.ThumbnailURL != null) entry.ThumbnailHasBeenDownloaded = true;
+                    if (entry.ThumbnailURL != null)
+                    {
+                        entry.Fetched = true;
+                    }
 
                     if (DB.Current.connection.Insert(entry) > 0)
                     {
                         i++;
-                        System.Diagnostics.Debug.WriteLine("Article inserted " + entry.ID);
+                        System.Diagnostics.Debug.WriteLine("RSS Article inserted " + entry.ID);
                     }
 
                     

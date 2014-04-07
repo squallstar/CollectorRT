@@ -63,7 +63,7 @@ namespace CollectorRT.Data.Downloaders
         {
             if (IsBusy) return;
 
-            var tmp = DB.Current.entries.Where(e => e.ThumbnailHasBeenDownloaded == false);
+            var tmp = DB.Current.entries.Where(e => e.Fetched != true);
 
             if (source != null)
             {
@@ -153,6 +153,12 @@ namespace CollectorRT.Data.Downloaders
                         if (entry.Summary == null)
                         {
                             var summary = doc.DocumentNode.QuerySelector("meta[property='description']");
+
+                            if (summary == null || summary.Attributes["content"] == null)
+                            {
+                                summary = doc.DocumentNode.QuerySelector("meta[name='description']");
+                            }
+
                             if (summary == null || summary.Attributes["content"] == null)
                             {
                                 summary = doc.DocumentNode.QuerySelector("meta[name='og:description']");
@@ -174,7 +180,6 @@ namespace CollectorRT.Data.Downloaders
                         var img = doc.DocumentNode.QuerySelector("meta[name='twitter:image']");
                         if (img == null || img.Attributes["content"] == null)
                         {
-                            System.Diagnostics.Debug.WriteLine("-- image found");
                             img = doc.DocumentNode.QuerySelector("meta[property='og:image']");
 
                             if (img == null)
@@ -186,7 +191,6 @@ namespace CollectorRT.Data.Downloaders
                         if (img != null && img.Attributes["content"] != null)
                         {
                             var imgUrl = img.Attributes["content"].Value;
-                            System.Diagnostics.Debug.WriteLine("-- image found for real " + imgUrl);
 
                             entry.ThumbnailURL = System.Net.WebUtility.HtmlDecode(imgUrl);
 
@@ -197,7 +201,7 @@ namespace CollectorRT.Data.Downloaders
                                 if (entry.ThumbnailURL.StartsWith("//"))
                                 {
                                     // URL without protocol
-                                    entry.ThumbnailURL = String.Format("{0}:{1}", x.Scheme,entry.ThumbnailURL);
+                                    entry.ThumbnailURL = String.Format("{0}:{1}", x.Scheme, entry.ThumbnailURL);
 
                                     System.Diagnostics.Debug.WriteLine("Image url resolved to absolute: " + entry.ThumbnailURL);
                                 }
@@ -217,7 +221,7 @@ namespace CollectorRT.Data.Downloaders
                 }
                 finally
                 {
-                    entry.ThumbnailHasBeenDownloaded = true;
+                    entry.Fetched = true;
                 }
             }
 

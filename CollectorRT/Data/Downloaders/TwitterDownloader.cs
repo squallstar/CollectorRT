@@ -101,7 +101,7 @@ namespace CollectorRT.Data.Downloaders
                              + "/status/" + id
                         ,
                         Source = source.ID,
-                        ThumbnailHasBeenDownloaded = false,
+                        Fetched = false,
                         SourceURL = source.Kind
                     };
 
@@ -113,7 +113,6 @@ namespace CollectorRT.Data.Downloaders
                             foreach (JToken img in status["entities"]["media"].Children())
                             {
                                 tweet.ThumbnailURL = (string)img["media_url"];
-                                tweet.ThumbnailHasBeenDownloaded = true;
                                 break;
                             }
                         }
@@ -124,15 +123,14 @@ namespace CollectorRT.Data.Downloaders
                             foreach (JToken url in status["entities"]["urls"].Children())
                             {
                                 tweet.Link = (string)url["expanded_url"];
-                                //System.Diagnostics.Debug.WriteLine("Url found on a tweet: " + tweet.Link);
                                 break;
                             }
                         }
 
-                        if (tweet.Link == null && tweet.ThumbnailURL == null)
+                        if (tweet.Link == null)
                         {
-                            //It's no possible to gather a thumbnail
-                            tweet.ThumbnailHasBeenDownloaded = true;
+                            //It's no possible to gather a thumbnail, There's no link!
+                            tweet.Fetched = true;
                         }
                     }
 

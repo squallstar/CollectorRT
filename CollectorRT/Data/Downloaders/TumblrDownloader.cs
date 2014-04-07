@@ -69,7 +69,7 @@ namespace CollectorRT.Data.Downloaders
                     Source = source.ID,
                     SourceURL = "tumblr-" + source.Url,
                     Title = title != null ? title : "Untitled",
-                    ThumbnailHasBeenDownloaded = false,
+                    Fetched = false,
                     Link = post["post_url"] != null ? post["post_url"].ToString() : null,
                     SourceTitle = post["source_title"] != null ? post["source_title"].ToString() : null,
                     DatePublish = PubDate,
@@ -79,12 +79,11 @@ namespace CollectorRT.Data.Downloaders
                     AuthorUsername = source.Title
                 };
 
-                if (entry.ContentText != null) entry.Summary = body.Length > 140 ? body.Substring(0, 139) + "..." : null;
-
-                System.Diagnostics.Debug.WriteLine("Inserting tumblr post " + entry.ID);
+                if (entry.ContentText != null) entry.Summary = body.Length > 140 ? body.Substring(0, 139) + "..." : null;                
 
                 if (DB.Current.connection.Insert(entry) > 0)
                 {
+                    System.Diagnostics.Debug.WriteLine("Tumblr post inserted " + entry.ID);
                     i++;
                 }
             }

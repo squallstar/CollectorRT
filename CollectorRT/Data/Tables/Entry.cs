@@ -14,6 +14,9 @@ namespace CollectorRT.Data.Tables
         public string Summary { get; set; }
         public string ContentText { get; set; }
 
+        [SQLite.Indexed(Name = "IndexFetched")]
+        public bool Fetched { get; set; }
+
         [SQLite.Indexed(Name = "IndexThumbnailURL")]
         public string ThumbnailURL { get; set; }
 
@@ -26,8 +29,8 @@ namespace CollectorRT.Data.Tables
         [SQLite.Indexed(Name = "IndexSource")]
         public int Source { get; set; }
 
-        [SQLite.Indexed(Name = "IndexThumbnailHasBeenDownloaded")]
-        public bool ThumbnailHasBeenDownloaded { get; set; }
+        //[SQLite.Indexed(Name = "IndexThumbnailHasBeenDownloaded")]
+        //public bool ThumbnailHasBeenDownloaded { get; set; }
 
         [SQLite.Indexed(Name = "IndexDateInsert")]
         public DateTime DateInsert { get; set; }
