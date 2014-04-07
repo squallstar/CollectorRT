@@ -37,13 +37,9 @@ namespace CollectorRT.Data.Downloaders
                     return newArticles;
                 }
 
-                var tweets = JObject.Parse(data);
+                var tweets = JObject.Parse("{\"data\": " + data + "}")["data"].ToList();
 
-                System.Diagnostics.Debug.WriteLine("Boom");
-
-                //var posts = JObject.Parse("{\"data\": " + data + "}")["data"]["response"]["posts"].ToList();
-
-                //newArticles += AddEntries(posts, source);
+                newArticles += AddEntries(tweets, source);
             }
             catch (Exception e)
             {
@@ -63,17 +59,19 @@ namespace CollectorRT.Data.Downloaders
 
         private static async Task<string> GetUserHomeTimeline()
         {
-            return await ClientForCurrentUser.GetStringAsync("http://api.twitter.com/1.1/statuses/home_timeline.json?count=40&page=1");
+            return await ClientForCurrentUser.GetStringAsync("https://api.twitter.com/1.1/statuses/home_timeline.json?count=40&page=1");
         }
 
         private static async Task<string> GetUserTweets(string screen_name)
         {
-            return await ClientForCurrentUser.GetStringAsync("http://api.twitter.com/1.1/statuses/user_timeline.json?count=40&page=1&include_entities=true&exclude_replies=false&screen_name=" + screen_name);
+            return await ClientForCurrentUser.GetStringAsync("https://api.twitter.com/1.1/statuses/user_timeline.json?count=40&page=1&include_entities=true&exclude_replies=false&screen_name=" + screen_name);
         }
 
-        private static void AddEntries(JObject tweets, Source source)
+        private static int AddEntries(List<JToken> tweets, Source source)
         {
+            int i = 0;
 
+            return i;
         }
     }
 }
