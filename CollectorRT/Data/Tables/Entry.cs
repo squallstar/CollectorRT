@@ -14,6 +14,8 @@ namespace CollectorRT.Data.Tables
         public string Summary { get; set; }
         public string ContentText { get; set; }
 
+        public string ObjectID { get; set; }
+
         [SQLite.Indexed(Name = "IndexFetched")]
         public bool Fetched { get; set; }
 

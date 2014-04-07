@@ -227,9 +227,6 @@ namespace CollectorRT.Data.Downloaders
 
                                     System.Diagnostics.Debug.WriteLine("Image url resolved to absolute: " + entry.ThumbnailURL);
                                 }
-                                
-                               
-                                
                             }
                         }
                     }

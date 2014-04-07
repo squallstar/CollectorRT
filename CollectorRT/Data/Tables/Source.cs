@@ -68,13 +68,14 @@ namespace CollectorRT.Data.Tables
                 return Source.UpToDate;
             }
 
-            System.Diagnostics.Debug.WriteLine("Updating source " + ID);
+            System.Diagnostics.Debug.WriteLine("Updating source #" + ID + " (" + Kind + ")");
 
             int newArticles = 0;
 
             if (Kind == "rss") newArticles = await RSSDownloader.UpdateSource(this);
             else if (IsTumblrKind) newArticles = await TumblrDownloader.UpdateSource(this);
             else if (IsTwitterKind) newArticles = await TwitterDownloader.UpdateSource(this);
+            else if (Kind == "pocket") newArticles = await PocketDownloader.UpdateSource(this);
 
             UnreadEntries += newArticles;
             DateUpdate = DateTime.Now;

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CollectorRT.Data.Tables;
 using System.Text.RegularExpressions;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace CollectorRT.Data
 {
@@ -50,6 +51,19 @@ namespace CollectorRT.Data
             using (var client = new HttpClient())
             {
                 return await client.GetStringAsync(url);                
+            }
+        }
+
+        public static async Task<string> PostContentToUrl(string url, string postBody)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.PostAsync(url, new StringContent(postBody, Encoding.UTF8, "application/json"));
+
+                response.EnsureSuccessStatusCode();
+
+                return await response.Content.ReadAsStringAsync();
             }
         }
 

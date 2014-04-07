@@ -136,6 +136,7 @@ namespace CollectorRT.Data.Downloaders
 
                     if (DB.Current.connection.Insert(tweet) > 0)
                     {
+                        System.Diagnostics.Debug.WriteLine("Tweet added " + tweet.ID);
                         i++;
                     }
                 }

@@ -78,6 +78,19 @@ namespace CollectorRT.Data
             }
         }
 
+        public string PocketAccessToken
+        {
+            get
+            {
+                if (settings.Values.ContainsKey("Settings.Pocket.AccessToken"))
+                {
+                    return settings.Values["Settings.Pocket.AccessToken"].ToString();
+                }
+
+                return "";
+            }
+        }
+
         public void Logout()
         {
             settings.Values.Remove(AccountLogged);
@@ -210,7 +223,7 @@ namespace CollectorRT.Data
                         this.ReplaceStringSetting(serverSettings, "Settings.Instagram.AccessToken");
                         this.ReplaceStringSetting(serverSettings, "Settings.Instagram.FullName");
 
-                        //this.ReplaceStringSetting(serverSettings, Pocket.AccessTokenKey);
+                        this.ReplaceStringSetting(serverSettings, "Settings.Pocket.AccessToken");
                         //this.ReplaceStringSetting(serverSettings, Pocket.UsernameKey);
 
                         this.LastSyncTimestamp = int.Parse(result["datesync"].ToString());
