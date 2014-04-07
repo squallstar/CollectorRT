@@ -132,8 +132,17 @@ namespace CollectorRT.Data.Downloaders
                     {
                         var doc = new HtmlAgilityPack.HtmlDocument();
                         doc.LoadHtml(data);
+
+                        // 1. title
+
+                        var title = doc.DocumentNode.QuerySelector("title");
+
+                        if (title != null)
+                        {
+                            entry.Title = title.InnerText;
+                        }
                            
-                        // 1. url
+                        // 2. url
 
                         var url = doc.DocumentNode.QuerySelector("meta[property='og:url']");
                      
@@ -148,7 +157,7 @@ namespace CollectorRT.Data.Downloaders
                             entry.Link = url.Attributes["content"].Value;
                         }
 
-                        // 2. summary
+                        // 3. summary
 
                         if (entry.Summary == null)
                         {
@@ -175,7 +184,7 @@ namespace CollectorRT.Data.Downloaders
                             }
                         }
 
-                        // 3. image
+                        // 4. image
 
                         var img = doc.DocumentNode.QuerySelector("meta[name='twitter:image']");
                         if (img == null || img.Attributes["content"] == null)
