@@ -74,7 +74,6 @@ namespace CollectorRT
 
         private async void LoadCollections()
         {
-
             var syncSuccess = await SyncAccount();
             if (syncSuccess)
             {
@@ -127,6 +126,7 @@ namespace CollectorRT
             }
             else
             {
+                DB.Current.Clean();
                 LoadCollections();
             }
         }

@@ -33,6 +33,12 @@ namespace CollectorRT.Data
             }
         }
 
+        public void Clean()
+        {
+            connection.DeleteAll<Entry>();
+            connection.DeleteAll<Source>();
+        }
+
         public SQLite.TableQuery<Source> sources
         {
             get

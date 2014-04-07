@@ -202,8 +202,7 @@ namespace CollectorRT
             ContentDownloader.Current.Stop();
             Account.Current.Logout();
 
-            DB.Current.connection.DeleteAll<Entry>();
-            DB.Current.connection.DeleteAll<Source>();
+            DB.Current.Clean();
 
             Application.Current.Exit();
         }
