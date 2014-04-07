@@ -71,7 +71,89 @@ namespace CollectorRT.Data.Downloaders
         {
             int i = 0;
 
+            var now = DateTime.Now;
+
+            foreach (var status in tweets)
+            {
+                var id = String.Format("{0}-{1}", source.ID, (string)status["id"]);
+
+                bool exist = DB.Current.entries.Where(e => e.ID == id).Any();
+
+                if (exist)
+                {
+                    System.Diagnostics.Debug.WriteLine("Skipping tweet " + id);
+                    continue;
+                }
+
+                try
+                {
+                    var tweet = new Entry
+                    {
+                        Kind = "tweet",
+                        ID = id,
+                        Title = System.Net.WebUtility.HtmlDecode((string)status["text"]),
+                        DatePublish = ParseTwitterDateTime((string)status["created_at"]),
+                        DateInsert = now,
+                        Author = (string)status["user"]["name"],
+                        AuthorUsername = (string)status["user"]["screen_name"],
+                        AuthorThumbnail = ((string)status["user"]["profile_image_url"]).Replace("_normal", "_bigger"),
+                        Link = "https://twitter.com/" + (string)status["user"]["screen_name"]
+                             + "/status/" + id
+                        ,
+                        Source = source.ID,
+                        ThumbnailHasBeenDownloaded = false,
+                        SourceURL = source.Kind
+                    };
+
+                    if (status["entities"] != null)
+                    {
+                        //Image
+                        if (status["entities"]["media"] != null)
+                        {
+                            foreach (JToken img in status["entities"]["media"].Children())
+                            {
+                                tweet.ThumbnailURL = (string)img["media_url"];
+                                tweet.ThumbnailHasBeenDownloaded = true;
+                                break;
+                            }
+                        }
+
+                        //URL
+                        if (status["entities"]["urls"] != null)
+                        {
+                            foreach (JToken url in status["entities"]["urls"].Children())
+                            {
+                                tweet.Link = (string)url["expanded_url"];
+                                //System.Diagnostics.Debug.WriteLine("Url found on a tweet: " + tweet.Link);
+                                break;
+                            }
+                        }
+
+                        if (tweet.Link == null && tweet.ThumbnailURL == null)
+                        {
+                            //It's no possible to gather a thumbnail
+                            tweet.ThumbnailHasBeenDownloaded = true;
+                        }
+                    }
+
+                    if (DB.Current.connection.Insert(tweet) > 0)
+                    {
+                        i++;
+                    }
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                }
+            }
+
             return i;
+        }
+
+        public static DateTime ParseTwitterDateTime(string date)
+        {
+            const string format = "ddd MMM dd HH:mm:ss zzzz yyyy";
+            return DateTime.ParseExact(date, format, System.Globalization.CultureInfo.InvariantCulture);
         }
     }
 }

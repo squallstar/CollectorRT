@@ -21,6 +21,7 @@ namespace CollectorRT.Data.Tables
         public string Kind { get; set; }
         public string Author { get; set; }
         public string AuthorUsername { get; set; }
+        public string AuthorThumbnail { get; set; }
 
         [SQLite.Indexed(Name = "IndexSource")]
         public int Source { get; set; }
