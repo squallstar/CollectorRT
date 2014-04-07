@@ -50,5 +50,14 @@ namespace CollectorRT.Data.Tables
                 return ret;
             }
         }
+
+        public string SummaryOrContent
+        {
+            get
+            {
+                if (Summary != null) return Summary;
+                else return ContentText;
+            }
+        }
     }
 }

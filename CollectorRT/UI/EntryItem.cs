@@ -124,14 +124,16 @@ namespace CollectorRT.UI
 
             //3. Description
 
-            if (_entry.ContentText != null)
+            var content = _entry.SummaryOrContent;
+
+            if (content != null)
             {
                 _content = new TextBlock
                 {
                     FontSize = 20,
                     LineHeight = 25,
                     FontFamily = new FontFamily("/Assets/ProximaNova-R.ttf#Proxima Nova"),
-                    Text = _entry.ContentText,
+                    Text = content,
                     Margin = new Thickness(20, 0, 20, 20),
                     TextWrapping = Windows.UI.Xaml.TextWrapping.Wrap,
                     Foreground = new SolidColorBrush(Color.FromArgb(255, 110, 110, 110)),
