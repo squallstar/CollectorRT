@@ -135,11 +135,14 @@ namespace CollectorRT.Data.Downloaders
 
                         // 1. title
 
-                        var title = doc.DocumentNode.QuerySelector("title");
-
-                        if (title != null)
+                        if (entry.Title == null || entry.Kind != "rss")
                         {
-                            entry.Title = title.InnerText;
+                            var title = doc.DocumentNode.QuerySelector("title");
+
+                            if (title != null)
+                            {
+                                entry.Title = title.InnerText;
+                            }
                         }
                            
                         // 2. url
