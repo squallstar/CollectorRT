@@ -54,12 +54,12 @@ namespace CollectorRT.Data
             }
         }
 
-        public static async Task<string> PostContentToUrl(string url, string postBody)
+        public static async Task<string> PostJsonContentToUrl(string url, string postBody)
         {
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage response = await client.PostAsync(url, new StringContent(postBody, Encoding.UTF8, "application/json"));
+                var body = new StringContent(postBody, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(url, body);
 
                 response.EnsureSuccessStatusCode();
 

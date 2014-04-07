@@ -36,7 +36,7 @@ namespace CollectorRT.Data.Downloaders
 
                 string postData = JsonConvert.SerializeObject(data);
 
-                var response = await PostContentToUrl("https://getpocket.com/v3/get", postData);
+                var response = await PostJsonContentToUrl("https://getpocket.com/v3/get", postData);
 
                 var objects = JObject.Parse("{\"data\": " + response + "}")["data"]["list"];
 
